@@ -3,125 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TecnoServicios Cardoza Contreras | Tienda Tech</title>
+    <title>TecnoServicios Cardoza Contreras | Tech Excellence</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
 
     <style>
         :root {
-            --primary: #ff3e00; /* Naranja del logo */
-            --bg: #000000;
-            --card-bg: #0a0a0a;
-            --text: #ffffff;
+            --primary: #ff5e00;
+            --primary-glow: rgba(255, 94, 0, 0.3);
+            --bg: #030303;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        
+        body { 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
 
+        /* Luces de fondo decorativas */
+        .blob {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(80px);
+            border-radius: 50%;
+        }
+
+        /* NAVBAR PREMIUM */
         nav {
-            padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--primary);
-            position: sticky; top: 0; z-index: 100;
+            padding: 1.5rem 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(3, 3, 3, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .logo-img { height: 50px; } /* Aquí irá el logo que subiste */
+        .logo { font-weight: 800; font-size: 1rem; letter-spacing: -0.5px; }
+        .logo span { color: var(--primary); }
 
-        .hero { padding: 4rem 5%; text-align: center; border-bottom: 1px solid #111; }
-        .hero h1 { font-size: 2.5rem; text-transform: uppercase; letter-spacing: -1px; }
-        .hero span { color: var(--primary); }
-
-        .shop-container { 
-            padding: 4rem 5%; 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 25px; 
+        /* HERO SECTION */
+        .hero {
+            padding: 8rem 8% 4rem;
+            text-align: center;
+        }
+        .hero h1 { 
+            font-size: clamp(2.5rem, 8vw, 5rem); 
+            font-weight: 800; 
+            line-height: 1; 
+            margin-bottom: 20px;
+            letter-spacing: -3px;
+        }
+        .hero span {
+            background: linear-gradient(90deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .product-box {
-            background: var(--card-bg); border: 1px solid #1a1a1a; 
-            padding: 20px; border-radius: 15px; text-align: center;
-            transition: 0.4s;
+        /* BENEFICIOS */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 0 8% 4rem;
         }
-        .product-box:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .f-card {
+            background: var(--glass);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .f-card i { color: var(--primary); margin-bottom: 10px; font-size: 1.2rem; }
 
-        .img-holder {
-            width: 100%; height: 220px; background-size: contain; 
-            background-repeat: no-repeat; background-position: center;
+        /* GRID DE PRODUCTOS */
+        .shop-grid {
+            padding: 2rem 8% 6rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .item-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 30px;
+            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            position: relative;
+            text-align: center;
+        }
+        .item-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 20px rgba(255, 94, 0, 0.1);
+        }
+
+        .img-box {
+            width: 100%;
+            height: 240px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            padding: 20px;
+        }
+        .img-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: 0.5s;
+        }
+        .item-card:hover img { transform: scale(1.1) rotate(2deg); }
+
+        .item-card h3 { 
+            font-size: 1.2rem; 
+            font-weight: 700; 
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cta-button {
+            display: block;
+            background: white;
+            color: black;
+            padding: 18px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .item-card:hover .cta-button {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 6rem 8%;
+            background: #000;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+        .rif-box {
+            padding: 8px 20px;
+            border: 1px solid var(--primary);
+            border-radius: 100px;
+            color: var(--primary);
+            font-weight: 800;
+            display: inline-block;
             margin-bottom: 20px;
         }
 
-        .info h3 { font-size: 1.2rem; margin-bottom: 15px; height: 50px; }
-        
-        .buy-btn {
-            display: block; width: 100%; padding: 12px;
-            background: var(--primary); color: white;
-            text-decoration: none; font-weight: 700; border-radius: 8px;
+        /* WA FLOAT */
+        .wa-button {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 65px;
+            height: 65px;
+            background: #25d366;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            z-index: 1000;
+            box-shadow: 0 15px 30px rgba(37, 211, 102, 0.3);
             transition: 0.3s;
         }
-        .buy-btn:hover { background: white; color: var(--primary); }
-
-        footer { padding: 3rem 5%; border-top: 1px solid #111; text-align: center; color: #444; font-size: 0.8rem; }
-        .rif { color: var(--primary); font-weight: 700; margin-top: 10px; display: block; }
+        .wa-button:hover { transform: scale(1.1) translateY(-5px); }
     </style>
 </head>
 <body>
 
+    <div class="blob" style="top: -100px; right: -100px;"></div>
+    <div class="blob" style="bottom: -100px; left: -100px; background: radial-gradient(circle, rgba(255,255,255,0.02) 0%, transparent 70%);"></div>
+
     <nav>
-        <div class="logo">
-            <strong style="font-size: 0.8rem; letter-spacing: 1px;">TECNO SERVICIOS CARDOZA CONTRERAS</strong>
-        </div>
-        <div style="color: var(--primary); font-size: 0.7rem; font-weight: 700;">RIF: J-40576201-2</div>
+        <div class="logo">TECNO SERVICIOS <span>CARDOZA CONTRERAS</span></div>
+        <div style="font-size: 0.7rem; font-weight: 700; opacity: 0.5;">RIF J-40576201-2</div>
     </nav>
 
     <header class="hero">
-        <h1 data-aos="zoom-in">Equipos <span>Garantizados</span></h1>
-        <p style="color: #666; margin-top: 10px;">Encuentra lo mejor en tecnología y accesorios.</p>
+        <h1 data-aos="fade-up">El Futuro de tu <span>Tecnología</span></h1>
+        <p data-aos="fade-up" data-aos-delay="200" style="color: #666; max-width: 600px; margin: 0 auto;">Venta de equipos de última generación y servicio técnico especializado con estándares de excelencia.</p>
     </header>
 
-    <div class="shop-container">
-        
-        <div class="product-box" data-aos="fade-up">
-            <div class="img-holder" style="background-image: url('img/Cámaras de Seguridad WiFi HD.png');"></div>
-            <div class="info">
-                <h3>Cámaras de Seguridad WiFi HD</h3>
-                <a href="https://wa.me/584145610065?text=Hola!%20Deseo%20consultar%20precio%20de:%20Cámaras%20de%20Seguridad%20WiFi%20HD" class="buy-btn" target="_blank">Consultar Precio</a>
+    <section class="features" data-aos="fade-up">
+        <div class="f-card"><i class="fas fa-shield-alt"></i><br>Garantía Real</div>
+        <div class="f-card"><i class="fas fa-truck"></i><br>Envíos Seguros</div>
+        <div class="f-card"><i class="fas fa-tools"></i><br>Soporte Técnico</div>
+        <div class="f-card"><i class="fas fa-check-circle"></i><br>Originalidad</div>
+    </section>
+
+    <div class="shop-grid">
+        <div class="item-card" data-aos="fade-up">
+            <div class="img-box">
+                <img src="Cámaras de Seguridad WiFi HD.PNG" alt="Cámara">
             </div>
+            <h3>Cámaras de Seguridad WiFi HD</h3>
+            <a href="https://wa.me/584145610065?text=Deseo%20precio%20de:%20Cámaras%20de%20Seguridad" class="cta-button" target="_blank">Consultar Disponibilidad</a>
         </div>
 
-        <div class="product-box" data-aos="fade-up" data-aos-delay="100">
-            <div class="img-holder" style="background-image: url('img/Lamparas LED Recargable.png');"></div>
-            <div class="info">
-                <h3>Lámparas LED Recargables</h3>
-                <a href="https://wa.me/584145610065?text=Hola!%20Deseo%20consultar%20precio%20de:%20Lámparas%20LED%20Recargables" class="buy-btn" target="_blank">Consultar Precio</a>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="img-box">
+                <img src="Lamparas LED Recargable.PNG" alt="Lámpara">
             </div>
+            <h3>Lámparas LED Recargables</h3>
+            <a href="https://wa.me/584145610065?text=Deseo%20precio%20de:%20Lámparas%20LED" class="cta-button" target="_blank">Consultar Disponibilidad</a>
         </div>
 
-        <div class="product-box" data-aos="fade-up" data-aos-delay="200">
-            <div class="img-holder" style="background-image: url('img/Mouse inalambrico.png');"></div>
-            <div class="info">
-                <h3>Mouse Inalámbrico Pro</h3>
-                <a href="https://wa.me/584145610065?text=Hola!%20Deseo%20consultar%20precio%20de:%20Mouse%20inalámbrico" class="buy-btn" target="_blank">Consultar Precio</a>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="img-box">
+                <img src="Mouse inalambrico.PNG" alt="Mouse">
             </div>
+            <h3>Mouse Inalámbrico Pro</h3>
+            <a href="https://wa.me/584145610065?text=Deseo%20precio%20de:%20Mouse%20Inalámbrico" class="cta-button" target="_blank">Consultar Disponibilidad</a>
         </div>
 
-        <div class="product-box" data-aos="fade-up" data-aos-delay="300">
-            <div class="img-holder" style="background-image: url('img/Roku Express.png');"></div>
-            <div class="info">
-                <h3>Roku Express HD</h3>
-                <a href="https://wa.me/584145610065?text=Hola!%20Deseo%20consultar%20precio%20de:%20Roku%20Express" class="buy-btn" target="_blank">Consultar Precio</a>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="img-box">
+                <img src="Roku Express.PNG" alt="Roku">
             </div>
+            <h3>Roku Express HD</h3>
+            <a href="https://wa.me/584145610065?text=Deseo%20precio%20de:%20Roku%20Express" class="cta-button" target="_blank">Consultar Disponibilidad</a>
         </div>
-
     </div>
 
     <footer>
-        <p>TECNO SERVICIOS CARDOZA CONTRERAS</p>
-        <span class="rif">RIF: J-40576201-2</span>
-        <p style="margin-top: 20px;">© 2026 Diseñado por Carlos.Dev</p>
+        <div class="rif-box">RIF: J-40576201-2</div>
+        <h2 style="font-weight: 800; margin-bottom: 10px;">TECNO SERVICIOS CARDOZA CONTRERAS</h2>
+        <p style="color: #444; font-size: 0.8rem;">Expertos en Soluciones Tecnológicas Integrales</p>
+        <div style="margin-top: 40px; font-size: 0.6rem; color: #222;">MADE BY CARLOS.DEV // 2026</div>
     </footer>
 
+    <a href="https://wa.me/584145610065" class="wa-button" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script>AOS.init({ duration: 800, once: true });</script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+    </script>
 </body>
 </html>
