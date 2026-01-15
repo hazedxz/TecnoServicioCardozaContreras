@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TecnoServicios Cardoza Contreras | Tienda Tech</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+    <style>
+        :root {
+            --primary: #ff3e00; /* Naranja del logo */
+            --bg: #000000;
+            --card-bg: #0a0a0a;
+            --text: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; }
+
+        nav {
+            padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--primary);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo-img { height: 50px; } /* Aquí irá el logo que subiste */
+
+        .hero { padding: 4rem 5%; text-align: center; border-bottom: 1px solid #111; }
+        .hero h1 { font-size: 2.5rem; text-transform: uppercase; letter-spacing: -1px; }
+        .hero span { color: var(--primary); }
+
+        .shop-container { 
+            padding: 4rem 5%; 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; 
+        }
+
+        .product-box {
+            background: var(--card-bg); border: 1px solid #1a1a1a; 
+            padding: 20px; border-radius: 15px; text-align: center;
+            transition: 0.4s;
+        }
+        .product-box:hover { border-color: var(--primary); transform: translateY(-5px); }
+
+        .img-holder {
+            width: 100%; height: 220px; background-size: contain; 
+            background-repeat: no-repeat; background-position: center;
+            margin-bottom: 20px;
+        }
+
+        .info h3 { font-size: 1.2rem; margin-bottom: 15px; height: 50px; }
+        
+        .buy-btn {
+            display: block; width: 100%; padding: 12px;
+            background: var(--primary); color: white;
+            text-decoration: none; font-weight: 700; border-radius: 8px;
+            transition: 0.3s;
+        }
+        .buy-btn:hover { background: white; color: var(--primary); }
+
+        footer { padding: 3rem 5%; border-top: 1px solid #111; text-align: center; color: #444; font-size: 0.8rem; }
+        .rif { color: var(--primary); font-weight: 700; margin-top: 10px; display: block; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <strong style="font-size: 0.8rem; letter-spacing: 1px;">TECNO SERVICIOS CARDOZA CONTRERAS</strong>
+        </div>
+        <div style="color: var(--primary); font-size: 0.7rem; font-weight: 700;">RIF: J-40576201-2</div>
+    </nav>
+
+    <header class="hero">
+        <h1 data-aos="zoom-in">Equipos <span>Garantizados</span></h1>
+        <p style="color: #666; margin-top: 10px;">Encuentra lo mejor en tecnología y accesorios.</p>
+    </header>
+
+    <div class="shop-container">
+        
+        <div class="product-box" data-aos="fade-up">
+            <div class="img-holder" style="background-image: url('img/Cámaras de Seguridad WiFi HD.png');"></div>
+            <div class="info">
+                <h3>Cámaras de Seguridad WiFi HD</h3>
+                <a href="https://wa.me/584145610065?text=Hola!%20Deseo%20consultar%20precio%20de:%20Cámaras%20de%20Seguridad%20WiFi%20HD" class="buy-btn" target="_blank">Consultar Precio</a>
+            </div>
+        </div>
+
+        <div class="product-box" data-aos="fade-up" data-aos-delay="100">
+            <div class="img-holder" style="background-image: url('img/Lamparas LED Recargable.png');"></div>
+            <div class="info">
+                <h3>Lámparas LED Recargables</h3>
+                <a href="https://wa.me/584145610065?text=Hola!%20Deseo%20consultar%20precio%20de:%20Lámparas%20LED%20Recargables" class="buy-btn" target="_blank">Consultar Precio</a>
+            </div>
+        </div>
+
+        <div class="product-box" data-aos="fade-up" data-aos-delay="200">
+            <div class="img-holder" style="background-image: url('img/Mouse inalambrico.png');"></div>
+            <div class="info">
+                <h3>Mouse Inalámbrico Pro</h3>
+                <a href="https://wa.me/584145610065?text=Hola!%20Deseo%20consultar%20precio%20de:%20Mouse%20inalámbrico" class="buy-btn" target="_blank">Consultar Precio</a>
+            </div>
+        </div>
+
+        <div class="product-box" data-aos="fade-up" data-aos-delay="300">
+            <div class="img-holder" style="background-image: url('img/Roku Express.png');"></div>
+            <div class="info">
+                <h3>Roku Express HD</h3>
+                <a href="https://wa.me/584145610065?text=Hola!%20Deseo%20consultar%20precio%20de:%20Roku%20Express" class="buy-btn" target="_blank">Consultar Precio</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>TECNO SERVICIOS CARDOZA CONTRERAS</p>
+        <span class="rif">RIF: J-40576201-2</span>
+        <p style="margin-top: 20px;">© 2026 Diseñado por Carlos.Dev</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>AOS.init({ duration: 800, once: true });</script>
+</body>
+</html>
