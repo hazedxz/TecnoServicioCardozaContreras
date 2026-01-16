@@ -3,25 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-Exclusive | Login</title>
+    <title>V-Exclusive | Acceso</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #fa0050; --bg: #000; }
+        :root { --primary: #fa0050; --bg: #000; --card: #111; --border: #222; }
         body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .card { background: #111; padding: 40px; border-radius: 30px; border: 1px solid #222; width: 90%; max-width: 350px; text-align: center; }
-        .logo { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; }
+        
+        .card { background: var(--card); padding: 40px; border-radius: 35px; border: 1px solid var(--border); width: 90%; max-width: 380px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .logo { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -2px; }
         .logo span { color: var(--primary); }
-        input { width: 100%; padding: 15px; margin-bottom: 10px; border-radius: 15px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--primary); color: white; font-weight: 800; cursor: pointer; }
+        
+        h2 { font-size: 1.2rem; margin-bottom: 25px; color: #fff; font-weight: 600; }
+        input { width: 100%; padding: 18px; margin-bottom: 12px; border-radius: 18px; border: 1px solid #333; background: #050505; color: white; box-sizing: border-box; font-size: 1rem; transition: 0.3s; }
+        input:focus { border-color: var(--primary); outline: none; background: #080808; }
+        
+        button { width: 100%; padding: 18px; border-radius: 18px; border: none; background: var(--primary); color: white; font-weight: 800; cursor: pointer; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(250, 0, 80, 0.3); }
+
+        .toggle-text { font-size: 0.9rem; color: #666; margin-top: 25px; }
+        .toggle-text b { color: var(--primary); cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="card">
         <div class="logo">V<span>EX</span></div>
-        <input type="email" id="email" placeholder="Correo">
+        <h2 id="form-title">Iniciar Sesión</h2>
+        
+        <input type="email" id="email" placeholder="Correo electrónico">
         <input type="password" id="pass" placeholder="Contraseña">
-        <button onclick="login()">ENTRAR</button>
-        <p style="font-size: 0.8rem; color: #555; margin-top: 15px;">Si no tienes cuenta, se creará automáticamente.</p>
+        
+        <button id="main-btn" onclick="handleAuth()">ENTRAR</button>
+        
+        <p class="toggle-text" id="toggle-wrapper">
+            ¿No tienes cuenta? <b onclick="toggleForm()">Regístrate</b>
+        </p>
     </div>
 
     <script type="module">
@@ -40,19 +55,39 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        window.login = async () => {
+        let isLogin = true;
+
+        window.toggleForm = () => {
+            isLogin = !isLogin;
+            document.getElementById('form-title').innerText = isLogin ? "Iniciar Sesión" : "Crear Cuenta";
+            document.getElementById('main-btn').innerText = isLogin ? "ENTRAR" : "REGISTRARSE";
+            document.getElementById('toggle-wrapper').innerHTML = isLogin 
+                ? '¿No tienes cuenta? <b onclick="toggleForm()">Regístrate</b>' 
+                : '¿Ya tienes cuenta? <b onclick="toggleForm()">Inicia sesión</b>';
+        };
+
+        window.handleAuth = async () => {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('pass').value;
+            const btn = document.getElementById('main-btn');
+
+            if(!email || !pass) return alert("Por favor, completa los campos");
+            
+            btn.innerText = "ESPERA...";
+            btn.disabled = true;
+
             try {
-                await signInWithEmailAndPassword(auth, email, pass);
-                window.location.href = "plataforma.html"; // Aquí mandamos a la plataforma
-            } catch (e) {
-                try {
+                if (isLogin) {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                } else {
                     await createUserWithEmailAndPassword(auth, email, pass);
-                    window.location.href = "plataforma.html";
-                } catch (err) {
-                    alert("Error: " + err.message);
+                    alert("¡Cuenta creada con éxito!");
                 }
+                window.location.href = "plataforma.html";
+            } catch (e) {
+                alert("Error: " + e.message);
+                btn.innerText = isLogin ? "ENTRAR" : "REGISTRARSE";
+                btn.disabled = false;
             }
         };
     </script>
