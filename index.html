@@ -3,48 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-Exclusive | Secure Entry</title>
+    <title>V-Exclusive | Acceso Seguro</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #fa0050; --bg: #050505; }
+        :root { --primary: #fa0050; --bg: #000; --card: #111; }
         body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
         
-        .login-card { background: #111; padding: 40px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .logo { font-size: 2.5rem; font-weight: 800; margin-bottom: 30px; letter-spacing: -2px; }
+        /* Fondo con brillo neón */
+        .glow { position: absolute; width: 300px; height: 300px; background: var(--primary); filter: blur(160px); opacity: 0.15; z-index: -1; }
+
+        .auth-card { background: var(--card); padding: 40px; border-radius: 35px; border: 1px solid rgba(255,255,255,0.05); width: 90%; max-width: 380px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .logo { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -2px; }
         .logo span { color: var(--primary); }
-        
-        input, select { width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 14px; border: 1px solid #222; background: #000; color: white; font-size: 1rem; }
-        button { width: 100%; padding: 16px; border-radius: 14px; border: none; background: var(--primary); color: white; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.3s; }
-        button:hover { transform: scale(1.02); opacity: 0.9; }
-        
-        .switch-text { margin-top: 20px; font-size: 0.85rem; color: #666; cursor: pointer; }
-        .switch-text b { color: var(--primary); }
-        
-        /* Ocultar campos de registro por defecto */
-        #reg-fields { display: none; }
+        h2 { font-size: 1.1rem; color: #666; margin-bottom: 30px; }
+
+        input, select { width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 16px; border: 1px solid #222; background: #000; color: white; font-size: 1rem; box-sizing: border-box; }
+        input:focus { border-color: var(--primary); outline: none; }
+
+        .btn-primary { width: 100%; padding: 18px; border-radius: 16px; border: none; background: var(--primary); color: white; font-weight: 800; cursor: pointer; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
+        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(250, 0, 80, 0.3); }
+
+        .toggle-btn { margin-top: 25px; font-size: 0.9rem; color: #888; cursor: pointer; }
+        .toggle-btn b { color: var(--primary); }
+
+        /* Campos ocultos inicialmente */
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="login-card">
+    <div class="glow"></div>
+    <div class="auth-card">
         <div class="logo">V<span>EX</span></div>
-        
-        <h2 id="form-title" style="margin-bottom: 20px;">Iniciar Sesión</h2>
-        
-        <div id="reg-fields">
-            <input type="text" id="username" placeholder="Nombre de usuario (ej: Andres_Vip)">
+        <h2 id="title">Inicia sesión para continuar</h2>
+
+        <div id="register-only" class="hidden">
+            <input type="text" id="username" placeholder="Nombre de usuario (ej: @mariavip)">
             <select id="rol">
-                <option value="fan">Soy Fan (Comprador)</option>
+                <option value="fan">Soy Comprador (Fan)</option>
                 <option value="creador">Soy Creador (Vendedor)</option>
             </select>
         </div>
 
         <input type="email" id="email" placeholder="Correo electrónico">
-        <input type="password" id="pass" placeholder="Contraseña">
-        
-        <button id="btn-main" onclick="handleAuth()">ENTRAR</button>
-        
-        <p class="switch-text" id="toggle-btn" onclick="toggleMode()">
-            ¿No tienes cuenta? <b>Regístrate</b>
+        <input type="password" id="password" placeholder="Contraseña">
+
+        <button class="btn-primary" id="main-action" onclick="handleAuth()">ENTRAR</button>
+
+        <p class="toggle-btn" onclick="toggleView()">
+            <span id="toggle-text">¿No tienes cuenta?</span> <b id="toggle-link">Regístrate</b>
         </p>
     </div>
 
@@ -54,60 +60,80 @@
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { 
-            // RELLENA CON TU CONFIGURACIÓN DE FIREBASE AQUÍ
+            apiKey: "AIzaSyA-y05rnK5lD_v3G7YPS2wE1LlmAjrTz9c",
+            authDomain: "v-exclusive.firebaseapp.com",
+            projectId: "v-exclusive",
+            storageBucket: "v-exclusive.firebasestorage.app",
+            messagingSenderId: "312654319716",
+            appId: "1:312654319716:web:eca438a0a4f0f9050f0f71"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let isLogin = true;
+        let mode = "login";
 
-        window.toggleMode = () => {
-            isLogin = !isLogin;
-            document.getElementById('reg-fields').style.display = isLogin ? 'none' : 'block';
-            document.getElementById('form-title').innerText = isLogin ? 'Iniciar Sesión' : 'Crear Cuenta';
-            document.getElementById('btn-main').innerText = isLogin ? 'ENTRAR' : 'REGISTRARME';
-            document.getElementById('toggle-btn').innerHTML = isLogin ? 
-                '¿No tienes cuenta? <b>Regístrate</b>' : '¿Ya tienes cuenta? <b>Inicia Sesión</b>';
+        // FUNCIÓN PARA CAMBIAR ENTRE LOGIN Y REGISTRO
+        window.toggleView = () => {
+            const regFields = document.getElementById('register-only');
+            const title = document.getElementById('title');
+            const mainBtn = document.getElementById('main-action');
+            const toggleText = document.getElementById('toggle-text');
+            const toggleLink = document.getElementById('toggle-link');
+
+            if (mode === "login") {
+                mode = "register";
+                regFields.classList.remove('hidden');
+                title.innerText = "Crea tu cuenta gratuita";
+                mainBtn.innerText = "REGISTRARME";
+                toggleText.innerText = "¿Ya tienes cuenta?";
+                toggleLink.innerText = "Inicia sesión";
+            } else {
+                mode = "login";
+                regFields.classList.add('hidden');
+                title.innerText = "Inicia sesión para continuar";
+                mainBtn.innerText = "ENTRAR";
+                toggleText.innerText = "¿No tienes cuenta?";
+                toggleLink.innerText = "Regístrate";
+            }
         };
 
+        // FUNCIÓN PRINCIPAL DE AUTENTICACIÓN
         window.handleAuth = async () => {
             const email = document.getElementById('email').value;
-            const pass = document.getElementById('pass').value;
+            const pass = document.getElementById('password').value;
+            const user = document.getElementById('username').value;
+            const rol = document.getElementById('rol').value;
+
+            if (!email || !pass) return alert("Por favor completa los campos");
 
             try {
-                if (isLogin) {
-                    // LOGIN
-                    const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-                    if (!userCredential.user.emailVerified) {
-                        alert("Por favor, revisa tu correo y verifica tu cuenta antes de entrar.");
+                if (mode === "login") {
+                    const res = await signInWithEmailAndPassword(auth, email, pass);
+                    if (!res.user.emailVerified) {
+                        alert("Verifica tu correo electrónico antes de entrar.");
                         return;
                     }
                     window.location.href = "plataforma.html";
                 } else {
-                    // REGISTRO
-                    const user = document.getElementById('username').value;
-                    const rol = document.getElementById('rol').value;
+                    if (!user) return alert("Elige un nombre de usuario");
                     
-                    if(!user) return alert("Escribe un nombre de usuario");
-
-                    const userWrap = await createUserWithEmailAndPassword(auth, email, pass);
+                    const res = await createUserWithEmailAndPassword(auth, email, pass);
                     
-                    // Guardar datos en Firestore inmediatamente
-                    await setDoc(doc(db, "usuarios", userWrap.user.uid), {
-                        username: user,
+                    // Guardar datos del usuario en la base de datos
+                    await setDoc(doc(db, "usuarios", res.user.uid), {
+                        username: user.replace('@',''),
                         rol: rol,
                         email: email,
+                        saldo: 0,
                         avatar: "",
                         banner: ""
                     });
 
-                    // Enviar verificación
-                    await sendEmailVerification(userWrap.user);
-                    
-                    alert("¡Registro exitoso! Revisa tu correo para verificar tu cuenta.");
-                    toggleMode(); // Vuelve al login
+                    await sendEmailVerification(res.user);
+                    alert("¡Registro exitoso! Te enviamos un correo de verificación.");
+                    toggleView(); // Regresa al login después de registrarse
                 }
             } catch (e) {
                 alert("Error: " + e.message);
