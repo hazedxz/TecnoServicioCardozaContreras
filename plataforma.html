@@ -3,74 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-Exclusive | Dashboard</title>
+    <title>V-Exclusive | Creator Suite</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #fa0050; --bg: #050505; --card: #121212; --border: rgba(255,255,255,0.08); }
         body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; padding-bottom: 100px; margin: 0; }
-        nav { height: 70px; background: rgba(5,5,5,0.8); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 0 6%; border-bottom: 1px solid var(--border); position: sticky; top:0; z-index:100; }
-        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; } .logo span { color: var(--primary); }
-        .container { max-width: 500px; margin: 0 auto; padding: 20px; }
-        .view { display: none; } .view.active { display: block; }
+        
+        /* DISEÑO DE PERFIL ESTILO ONLY */
+        .profile-header { position: relative; width: 100%; height: 180px; background: #222; overflow: hidden; }
+        .banner-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .avatar-container { position: absolute; bottom: -40px; left: 20px; width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--bg); background: #333; overflow: hidden; }
+        .avatar-img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-info { margin-top: 50px; padding: 0 20px; }
 
         /* POSTS */
-        .post { background: var(--card); border-radius: 25px; margin-bottom: 20px; border: 1px solid var(--border); overflow: hidden; }
-        .post-header { padding: 15px; display: flex; align-items: center; gap: 10px; }
-        .post-content { padding: 60px 20px; background: #0a0a0a; text-align: center; border-top: 1px solid var(--border); }
-        .btn-unlock { background: var(--primary); border: none; color: white; padding: 14px; border-radius: 15px; font-weight: 800; width: 80%; cursor: pointer; }
+        .post { background: var(--card); border-radius: 20px; margin-bottom: 20px; border: 1px solid var(--border); overflow: hidden; }
+        .post-img { width: 100%; display: block; }
+        .post-content { padding: 40px 20px; text-align: center; background: #0a0a0a; }
 
-        /* NOTIFICACIONES DE PAGO */
-        .notif-card { background: #1a1a1a; border: 1px solid var(--border); padding: 15px; border-radius: 20px; margin-bottom: 10px; }
-        .btn-approve { background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-
-        /* TAB BAR */
-        .tab-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 75px; background: rgba(20,20,20,0.9); backdrop-filter: blur(20px); border-radius: 35px; display: flex; justify-content: space-around; align-items: center; border: 1px solid var(--border); }
-        .tab-item { color: #444; font-size: 1.4rem; cursor: pointer; } .tab-item.active { color: var(--primary); }
+        /* INPUTS Y BOTONES */
+        input[type="file"] { display: none; }
+        .upload-label { background: #1a1a1a; padding: 12px; border-radius: 12px; display: block; margin-bottom: 10px; cursor: pointer; border: 1px dashed #444; font-size: 0.8rem; }
+        .btn-main { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
+        
+        .container { max-width: 500px; margin: 0 auto; }
+        .view { display: none; } .view.active { display: block; }
+        .tab-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 70px; background: rgba(20,20,20,0.9); backdrop-filter: blur(20px); border-radius: 30px; display: flex; justify-content: space-around; align-items: center; border: 1px solid var(--border); }
+        .tab-item { color: #444; font-size: 1.3rem; } .tab-item.active { color: var(--primary); }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">V<span>EX</span></div>
-        <div id="u-badge" style="font-size:0.7rem; background:var(--primary); padding:3px 10px; border-radius:10px; font-weight:800">...</div>
-    </nav>
-
     <div class="container">
         <div id="view-home" class="view active">
-            <div id="feed-container"></div>
-        </div>
-
-        <div id="view-admin" class="view">
-            <h3 style="margin-bottom: 20px;">Solicitudes de Pago</h3>
-            <div id="solicitudes-container">
-                <p style="color:#444">No hay pagos pendientes por revisar.</p>
-            </div>
+            <nav style="padding: 20px; border-bottom: 1px solid var(--border); margin-bottom: 10px;">
+                <b style="font-size: 1.5rem;">V<span style="color:var(--primary)">EX</span></b>
+            </nav>
+            <div id="feed-container" style="padding: 0 15px;"></div>
         </div>
 
         <div id="view-profile" class="view">
-            <div style="background:var(--card); padding:25px; border-radius:25px; border:1px solid var(--border)">
-                <h2 id="display-username">@Usuario</h2>
-                <div id="creator-fields" style="display:none; margin-top:20px">
-                    <input type="text" id="my-banco" placeholder="Banco" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; background:#000; color:white; border:1px solid #333;">
-                    <input type="text" id="my-tlf" placeholder="Teléfono" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; background:#000; color:white; border:1px solid #333;">
-                    <button onclick="savePayment()" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px; font-weight:bold;">Guardar Datos</button>
+            <div class="profile-header">
+                <img id="banner-view" class="banner-img" src="https://via.placeholder.com/800x400">
+                <div class="avatar-container">
+                    <img id="avatar-view" class="avatar-img" src="https://via.placeholder.com/150">
                 </div>
-                <button onclick="auth.signOut()" style="width:100%; margin-top:30px; background:none; border:none; color:#555;">Cerrar Sesión</button>
             </div>
+            
+            <div class="profile-info">
+                <h2 id="u-username">@Usuario</h2>
+                <p id="u-rol" style="color:var(--primary); font-size:0.8rem; font-weight:bold; margin-bottom: 20px;">CREADOR</p>
+                
+                <div id="creator-tools" style="background:var(--card); padding:20px; border-radius:20px; border:1px solid var(--border)">
+                    <p style="font-size:0.8rem; color:#888; margin-bottom:15px">Personalizar mi perfil:</p>
+                    
+                    <label class="upload-label" for="file-avatar"><i class="fas fa-camera"></i> Cambiar Foto Perfil</label>
+                    <input type="file" id="file-avatar" accept="image/*" onchange="uploadImage(this, 'avatar')">
+                    
+                    <label class="upload-label" for="file-banner"><i class="fas fa-image"></i> Cambiar Foto Portada</label>
+                    <input type="file" id="file-banner" accept="image/*" onchange="uploadImage(this, 'banner')">
+                    
+                    <hr style="opacity:0.1; margin:20px 0">
+                    <button class="btn-main" onclick="openPostModal()"><i class="fas fa-plus"></i> NUEVA PUBLICACIÓN</button>
+                    <button onclick="auth.signOut()" style="width:100%; margin-top:20px; background:none; border:none; color:#555">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="postModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:var(--card); padding:30px; border-radius:30px; width:85%; max-width:400px; text-align:center;">
+            <h3>Crear Post</h3><br>
+            <label class="upload-label" for="file-post" id="post-label">Seleccionar Foto/Video</label>
+            <input type="file" id="file-post" accept="image/*" onchange="document.getElementById('post-label').innerText='Imagen cargada ✅'">
+            <input type="number" id="post-price" placeholder="Precio $" style="width:100%; padding:15px; background:#000; color:white; border:1px solid #333; border-radius:12px; margin-bottom:15px;">
+            <button class="btn-main" onclick="saveNewPost()">PUBLICAR AHORA</button>
+            <button onclick="document.getElementById('postModal').style.display='none'" style="background:none; border:none; color:#555; margin-top:15px">Cancelar</button>
         </div>
     </div>
 
     <div class="tab-bar">
         <i class="fas fa-home tab-item active" onclick="showView('view-home', this)"></i>
-        <i id="admin-icon" class="fas fa-hand-holding-usd tab-item" style="display:none" onclick="showView('view-admin', this)"></i>
         <i class="fas fa-user tab-item" onclick="showView('view-profile', this)"></i>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, collection, addDoc, onSnapshot, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-y05rnK5lD_v3G7YPS2wE1LlmAjrTz9c",
@@ -90,88 +111,71 @@
             if (user) {
                 const snap = await getDoc(doc(db, "usuarios", user.uid));
                 myData = snap.data();
-                document.getElementById('display-username').innerText = "@" + myData.username;
-                document.getElementById('u-badge').innerText = myData.rol.toUpperCase();
-
-                if(myData.rol === 'creador') {
-                    document.getElementById('admin-icon').style.display = 'block';
-                    document.getElementById('creator-fields').style.display = 'block';
-                    escucharPagos(user.uid);
-                }
+                document.getElementById('u-username').innerText = "@" + myData.username;
+                document.getElementById('avatar-view').src = myData.avatar || 'https://via.placeholder.com/150';
+                document.getElementById('banner-view').src = myData.banner || 'https://via.placeholder.com/800x400';
                 loadFeed();
             } else { window.location.href = "index.html"; }
         });
 
-        // 1. EL CREADOR ESCUCHA SI LE HAN PAGADO
-        function escucharPagos(uid) {
-            const q = query(collection(db, "pagos"), where("creadorId", "==", uid), where("estado", "==", "pendiente"));
-            onSnapshot(q, (snap) => {
-                const container = document.getElementById('solicitudes-container');
-                container.innerHTML = snap.empty ? "<p style='color:#444'>No hay pagos pendientes.</p>" : "";
-                snap.forEach(pDoc => {
-                    const p = pDoc.data();
-                    container.innerHTML += `
-                        <div class="notif-card">
-                            <p><b>Ref:</b> ${p.referencia} | <b>Monto:</b> $${p.monto}</p>
-                            <small>Por: ${p.compradorEmail}</small><br><br>
-                            <button class="btn-approve" onclick="aprobarPago('${pDoc.id}', '${p.compradorId}', '${p.postId}')">APROBAR Y DESBLOQUEAR</button>
-                        </div>`;
-                });
-            });
-        }
-
-        // 2. EL CREADOR APRUEBA EL PAGO
-        window.aprobarPago = async (pagoId, compradorId, postId) => {
-            // Marcamos el pago como aprobado
-            await updateDoc(doc(db, "pagos", pagoId), { estado: "aprobado" });
-            // Le damos permiso al comprador para ver ese post específico
-            await setDoc(doc(db, "acceso_contenido", compradorId + "_" + postId), {
-                compradorId, postId, aprobado: true
-            });
-            alert("¡Pago aprobado! El fan ya puede ver tu foto.");
+        // FUNCIÓN MÁGICA PARA SUBIR IMAGEN (Convierte a Base64 para no usar Storage pesado)
+        window.uploadImage = (input, type) => {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const base64String = reader.result;
+                const update = {};
+                update[type] = base64String;
+                await updateDoc(doc(db, "usuarios", auth.currentUser.uid), update);
+                document.getElementById(type + '-view').src = base64String;
+                alert("Imagen actualizada!");
+            };
+            reader.readAsDataURL(file);
         };
 
-        // 3. CARGAR EL FEED CON LÓGICA DE DESBLOQUEO
+        window.saveNewPost = async () => {
+            const file = document.getElementById('file-post').files[0];
+            const price = document.getElementById('post-price').value;
+            if(!file || !price) return alert("Faltan datos");
+            
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                await addDoc(collection(db, "posts"), {
+                    url: reader.result,
+                    precio: price,
+                    creador: myData.username,
+                    creadorId: auth.currentUser.uid,
+                    fecha: new Date()
+                });
+                document.getElementById('postModal').style.display='none';
+                alert("Publicado con éxito!");
+            };
+            reader.readAsDataURL(file);
+        };
+
         function loadFeed() {
-            onSnapshot(collection(db, "posts"), async (snap) => {
+            const q = query(collection(db, "posts"), orderBy("fecha", "desc"));
+            onSnapshot(q, (snap) => {
                 const feed = document.getElementById('feed-container');
                 feed.innerHTML = "";
-                for (const d of snap.docs) {
+                snap.forEach(d => {
                     const post = d.data();
-                    const postId = d.id;
-                    
-                    // Verificamos si el usuario actual tiene acceso
-                    const accesoSnap = await getDoc(doc(db, "acceso_contenido", auth.currentUser.uid + "_" + postId));
-                    const tieneAcceso = accesoSnap.exists() || post.creadorId === auth.currentUser.uid;
-
+                    const isOwner = post.creadorId === auth.currentUser.uid;
                     feed.innerHTML += `
                         <div class="post">
-                            <div class="post-header"><b>@${post.creador}</b></div>
+                            <div class="post-header" style="padding:15px; display:flex; align-items:center; gap:10px">
+                                <b>@${post.creador}</b>
+                            </div>
                             <div class="post-content">
-                                ${tieneAcceso ? `<img src="${post.url}" style="width:100%">` : `
-                                    <i class="fas fa-lock" style="font-size:3rem; color:#fa0050"></i>
-                                    <button class="btn-unlock" onclick="reportarPago('${post.creadorId}', '${postId}', '${post.precio}')">
-                                        PAGAR $${post.precio}
-                                    </button>
+                                ${isOwner ? `<img src="${post.url}" class="post-img">` : `
+                                    <i class="fas fa-lock" style="font-size:3rem; color:var(--primary); opacity:0.3"></i>
+                                    <button class="btn-main" style="width:auto; margin-top:15px; padding:10px 30px">DESBLOQUEAR $${post.precio}</button>
                                 `}
                             </div>
                         </div>`;
-                }
+                });
             });
         }
-
-        window.reportarPago = async (creadorId, postId, monto) => {
-            const ref = prompt("Ingresa el número de referencia de tu Pago Móvil:");
-            if(ref) {
-                await addDoc(collection(db, "pagos"), {
-                    referencia: ref, monto, postId, creadorId, 
-                    compradorId: auth.currentUser.uid,
-                    compradorEmail: auth.currentUser.email,
-                    estado: "pendiente"
-                });
-                alert("Reporte enviado. Espera a que el creador lo apruebe.");
-            }
-        };
 
         window.showView = (id, el) => {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -179,15 +183,7 @@
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
         };
-
-        window.savePayment = async () => {
-            await updateDoc(doc(db, "usuarios", auth.currentUser.uid), {
-                banco: document.getElementById('my-banco').value,
-                tlf: document.getElementById('my-tlf').value
-            });
-            alert("Datos de pago guardados");
-        };
-
+        window.openPostModal = () => document.getElementById('postModal').style.display='flex';
         window.auth = auth;
     </script>
 </body>
