@@ -3,81 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-Exclusive | P2P Edition</title>
+    <title>V-Exclusive | Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #fa0050; --bg: #050505; --card: #121212; --border: rgba(255,255,255,0.08); --text-dim: #a0a0a0; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; padding-bottom: 100px; }
-
-        nav { position: sticky; top: 0; height: 70px; background: rgba(5,5,5,0.8); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 0 6%; border-bottom: 1px solid var(--border); z-index: 1000; }
-        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; } 
+        :root { --primary: #fa0050; --bg: #000; }
+        body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .card { background: #111; padding: 40px; border-radius: 30px; border: 1px solid #222; width: 90%; max-width: 350px; text-align: center; }
+        .logo { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; }
         .logo span { color: var(--primary); }
-
-        .view { display: none; padding: 20px; max-width: 500px; margin: 0 auto; animation: fadeIn 0.3s ease; }
-        .view.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* PERFIL / CONFIGURACION */
-        .config-card { background: var(--card); border-radius: 25px; padding: 25px; border: 1px solid var(--border); margin-bottom: 20px; }
-        h2 { margin-bottom: 20px; font-weight: 800; }
-        input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 15px; border-radius: 15px; color: white; margin-bottom: 15px; font-size: 0.9rem; }
-        .btn-save { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; }
-
-        /* POSTS */
-        .post { background: var(--card); border-radius: 30px; margin-bottom: 20px; border: 1px solid var(--border); overflow: hidden; }
-        .post-media { padding: 50px 20px; text-align: center; border-bottom: 1px solid var(--border); }
-        .post-media i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; }
-        .btn-pay { background: var(--primary); color: white; padding: 12px 25px; border-radius: 15px; border: none; font-weight: 800; margin-top: 15px; cursor: pointer; }
-
-        /* MENU INFERIOR */
-        .tab-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 70px; background: rgba(20,20,20,0.9); backdrop-filter: blur(20px); border-radius: 30px; display: flex; justify-content: space-around; align-items: center; border: 1px solid var(--border); }
-        .tab-item { color: #555; font-size: 1.3rem; cursor: pointer; }
-        .tab-item.active { color: var(--primary); }
+        input { width: 100%; padding: 15px; margin-bottom: 10px; border-radius: 15px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--primary); color: white; font-weight: 800; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <nav>
+    <div class="card">
         <div class="logo">V<span>EX</span></div>
-        <i class="fas fa-bell"></i>
-    </nav>
-
-    <div id="view-home" class="view active">
-        <div class="post">
-            <div class="post-media">
-                <i class="fas fa-lock"></i>
-                <h3>Foto de @Admin</h3>
-                <p style="color:var(--text-dim)">Precio: $5.00</p>
-                <button class="btn-pay" onclick="alert('Aquí se mostrarán los datos de Pago Móvil del dueño')">DESBLOQUEAR</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="view-profile" class="view">
-        <div class="config-card">
-            <h2>Mis Datos de Pago</h2>
-            <p style="color:var(--text-dim); font-size: 0.8rem; margin-bottom: 15px;">Configura tu Pago Móvil para recibir dinero de otros usuarios.</p>
-            
-            <input type="text" id="pago-banco" placeholder="Banco (Ej: Banesco)">
-            <input type="text" id="pago-tlf" placeholder="Teléfono">
-            <input type="text" id="pago-id" placeholder="Cédula">
-            
-            <button class="btn-save" onclick="savePaymentData()">GUARDAR DATOS</button>
-        </div>
-    </div>
-
-    <div class="tab-bar">
-        <i class="fas fa-home tab-item active" onclick="showView('view-home', this)"></i>
-        <i class="fas fa-plus-circle tab-item"></i>
-        <i class="fas fa-user tab-item" onclick="showView('view-profile', this)"></i>
+        <input type="email" id="email" placeholder="Correo">
+        <input type="password" id="pass" placeholder="Contraseña">
+        <button onclick="login()">ENTRAR</button>
+        <p style="font-size: 0.8rem; color: #555; margin-top: 15px;">Si no tienes cuenta, se creará automáticamente.</p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-y05rnK5lD_v3G7YPS2wE1LlmAjrTz9c",
@@ -89,52 +38,22 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
         const auth = getAuth(app);
 
-        let currentUser = null;
-
-        // Detectar usuario y cargar sus datos
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                const docRef = doc(db, "usuarios", user.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById('pago-banco').value = data.banco || "";
-                    document.getElementById('pago-tlf').value = data.tlf || "";
-                    document.getElementById('pago-id').value = data.id || "";
-                }
-            } else {
-                window.location.href = "index.html";
-            }
-        });
-
-        // Guardar datos en Firebase
-        window.savePaymentData = async () => {
-            if (!currentUser) return;
-            const banco = document.getElementById('pago-banco').value;
-            const tlf = document.getElementById('pago-tlf').value;
-            const id = document.getElementById('pago-id').value;
-
+        window.login = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
             try {
-                await setDoc(doc(db, "usuarios", currentUser.uid), {
-                    banco: banco,
-                    tlf: tlf,
-                    id: id
-                }, { merge: true });
-                alert("Datos guardados con éxito.");
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.location.href = "plataforma.html"; // Aquí mandamos a la plataforma
             } catch (e) {
-                alert("Error: " + e.message);
+                try {
+                    await createUserWithEmailAndPassword(auth, email, pass);
+                    window.location.href = "plataforma.html";
+                } catch (err) {
+                    alert("Error: " + err.message);
+                }
             }
-        };
-
-        window.showView = (viewId, element) => {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-            element.classList.add('active');
         };
     </script>
 </body>
