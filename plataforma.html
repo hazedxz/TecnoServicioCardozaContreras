@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-Exclusive | Mi Perfil</title>
+    <title>V-Exclusive | Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,101 +11,109 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; overflow: hidden; }
 
-        .app-grid { display: grid; grid-template-columns: 280px 1fr; height: 100vh; max-width: 1400px; margin: 0 auto; }
+        /* DISEÑO BASE (PC) */
+        .app-container { display: flex; height: 100vh; max-width: 1400px; margin: 0 auto; }
 
-        /* MENU LATERAL */
-        aside.sidebar { padding: 30px; border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; background: var(--bg); }
-        .nav-link { display: flex; align-items: center; gap: 15px; padding: 16px; border-radius: 18px; color: #888; text-decoration: none; font-weight: 600; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); margin-bottom: 8px; cursor: pointer; }
-        .nav-link:hover, .nav-link.active { background: #1a1a1a; color: white; transform: translateX(5px); }
-        .nav-link.active { color: var(--primary); background: rgba(250, 0, 80, 0.05); }
+        /* MENÚ LATERAL (Se oculta en móvil) */
+        aside.sidebar { width: 280px; padding: 30px; border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+        .logo { font-size: 1.8rem; font-weight: 800; margin-bottom: 40px; color: white; text-decoration: none; }
+        .logo span { color: var(--primary); }
+        .nav-link { display: flex; align-items: center; gap: 15px; padding: 16px; border-radius: 18px; color: #888; text-decoration: none; font-weight: 600; transition: 0.3s; margin-bottom: 8px; cursor: pointer; }
+        .nav-link:hover, .nav-link.active { background: #1a1a1a; color: white; }
+        .nav-link.active { color: var(--primary); }
 
-        /* CONTENEDOR DE VISTAS (TRANSICIONES) */
-        main.content-area { overflow-y: auto; scrollbar-width: none; position: relative; }
-        .view-section { display: none; animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        /* ÁREA DE CONTENIDO */
+        main.content-area { flex-grow: 1; overflow-y: auto; scrollbar-width: none; position: relative; padding-bottom: 80px; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
         .view-section.active { display: block; }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(10px); }
-            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* PERFIL ESTILO PROFESIONAL */
+        .profile-header { position: relative; width: 100%; height: 220px; background: #151515; }
+        .cover-img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-box { position: absolute; bottom: -50px; left: 20px; width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--bg); background: var(--primary); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; }
+        .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-meta { margin-top: 60px; padding: 0 20px; }
+
+        /* BILLETERA */
+        .wallet-card { background: linear-gradient(135deg, #1a1a1a 0%, #000 100%); padding: 30px; border-radius: 30px; border: 1px solid var(--border); text-align: center; margin: 20px; }
+        .balance { font-size: 3rem; font-weight: 800; margin: 15px 0; color: #fff; }
+
+        /* BARRA MÓVIL (Solo aparece en pantallas pequeñas) */
+        .mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: none; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 100; }
+        .mobile-nav i { font-size: 1.4rem; color: #666; cursor: pointer; }
+        .mobile-nav i.active { color: var(--primary); }
+
+        /* RESPONSIVO FINAL */
+        @media (max-width: 850px) {
+            aside.sidebar { display: none; }
+            .mobile-nav { display: flex; }
+            .profile-header { height: 160px; }
+            .avatar-box { width: 90px; height: 90px; bottom: -45px; }
         }
-
-        /* DISEÑO DEL PERFIL */
-        .profile-header { position: relative; width: 100%; height: 280px; background: #151515; }
-        .cover-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
-        
-        .avatar-container { position: absolute; bottom: -60px; left: 40px; width: 140px; height: 140px; }
-        .profile-avatar { width: 100%; height: 100%; border-radius: 50%; border: 6px solid var(--bg); object-fit: cover; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800; }
-        
-        .edit-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; cursor: pointer; }
-        .avatar-container:hover .edit-overlay { opacity: 1; }
-
-        .profile-info { margin-top: 80px; padding: 0 40px; }
-        .bio-box { margin-top: 15px; color: #888; line-height: 1.6; max-width: 500px; }
-        
-        /* BOTONES DE EDICIÓN */
-        .btn-edit-cover { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.3s; }
-        .btn-edit-cover:hover { background: var(--primary); }
-
-        /* FEED GRID */
-        .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 40px; }
-        .grid-item { aspect-ratio: 1/1; background: #111; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); }
-        .grid-item img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* OCULTAR INPUTS DE ARCHIVO */
-        .file-input { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="app-grid">
+    <div class="app-container">
         <aside class="sidebar">
-            <div style="font-size: 2rem; font-weight: 800; margin-bottom: 40px;">V<span>EX</span></div>
+            <a href="#" class="logo">V<span>EX</span></a>
             <div class="nav-link active" onclick="switchView('home-view', this)"><i class="fas fa-home"></i> <span>Feed</span></div>
             <div class="nav-link" onclick="switchView('profile-view', this)"><i class="fas fa-user"></i> <span>Mi Perfil</span></div>
-            <div class="nav-link"><i class="fas fa-wallet"></i> <span>Billetera</span></div>
-            <button class="nav-link" onclick="auth.signOut()" style="margin-top:auto; background:none; border:none;"><i class="fas fa-sign-out-alt"></i> <span>Salir</span></button>
+            <div class="nav-link" onclick="switchView('wallet-view', this)"><i class="fas fa-wallet"></i> <span>Billetera</span></div>
+            <button onclick="auth.signOut()" style="margin-top:auto; background:none; border:none; color:#444; text-align:left; cursor:pointer;"><i class="fas fa-sign-out-alt"></i> Salir</button>
         </aside>
 
         <main class="content-area">
             
             <section id="home-view" class="view-section active">
-                <div style="padding: 40px; max-width: 700px; margin: 0 auto;">
-                    <h1 style="margin-bottom: 30px;">Explorar</h1>
-                    <div id="global-feed">
-                        </div>
+                <div style="padding: 25px;">
+                    <h1 style="font-weight: 800; margin-bottom: 20px;">Para ti</h1>
+                    <button onclick="openModal()" style="background:var(--primary); border:none; color:white; padding:12px 20px; border-radius:12px; font-weight:800; margin-bottom:20px; cursor:pointer; width:100%;">+ NUEVA PUBLICACIÓN</button>
+                    <div id="feed-container"></div>
                 </div>
             </section>
 
             <section id="profile-view" class="view-section">
                 <div class="profile-header">
-                    <img id="cover-display" src="" class="cover-img">
-                    <button class="btn-edit-cover" onclick="document.getElementById('cover-input').click()"><i class="fas fa-camera"></i> Cambiar Portada</button>
-                    <input type="file" id="cover-input" class="file-input" onchange="updatePhoto('fotoPortada', this)">
-                    
-                    <div class="avatar-container">
-                        <div id="avatar-display" class="profile-avatar">?</div>
-                        <div class="edit-overlay" onclick="document.getElementById('avatar-input').click()"><i class="fas fa-camera"></i></div>
-                        <input type="file" id="avatar-input" class="file-input" onchange="updatePhoto('fotoPerfil', this)">
+                    <img id="p-cover" src="" class="cover-img">
+                    <button onclick="document.getElementById('in-cover').click()" style="position:absolute; top:15px; right:15px; background:rgba(0,0,0,0.5); border:none; color:white; padding:8px 12px; border-radius:8px; cursor:pointer;"><i class="fas fa-camera"></i></button>
+                    <input type="file" id="in-cover" style="display:none" onchange="updatePhoto('fotoPortada', this)">
+                    <div class="avatar-box" id="p-avatar-box" onclick="document.getElementById('in-avatar').click()" style="cursor:pointer;">?</div>
+                    <input type="file" id="in-avatar" style="display:none" onchange="updatePhoto('fotoPerfil', this)">
+                </div>
+                <div class="profile-meta">
+                    <h2 id="p-name" style="font-weight: 800;">@usuario</h2>
+                    <p id="p-rol-label" style="color:var(--primary); font-size:0.8rem; font-weight:800; margin-bottom:10px;">CREADOR</p>
+                    <p id="p-bio" onclick="editBio()" style="color:#888; cursor:pointer;">Haz clic para añadir biografía...</p>
+                </div>
+            </section>
+
+            <section id="wallet-view" class="view-section">
+                <div style="padding: 25px;">
+                    <h1 style="font-weight: 800; margin-bottom: 20px;">Mi Billetera</h1>
+                    <div class="wallet-card">
+                        <p style="color:#888; font-weight:600;">Saldo Disponible</p>
+                        <div class="balance">$<span id="w-balance">0.00</span></div>
+                        <button onclick="addMoney()" style="background:white; color:black; border:none; padding:15px 30px; border-radius:15px; font-weight:800; cursor:pointer;">RECARGAR SALDO</button>
                     </div>
                 </div>
-
-                <div class="profile-info">
-                    <h1 id="p-username" style="font-size: 2rem; font-weight: 800;">@usuario</h1>
-                    <p id="p-role" style="color: var(--primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; margin-top: 5px;">Creador</p>
-                    <div class="bio-box" id="p-bio" onclick="editBio()">Toca aquí para escribir algo sobre ti...</div>
-                </div>
-
-                <div class="posts-grid" id="my-posts">
-                    </div>
             </section>
 
         </main>
     </div>
 
+    <nav class="mobile-nav">
+        <i class="fas fa-home active" onclick="switchView('home-view', this)"></i>
+        <i class="fas fa-plus-circle" onclick="openModal()"></i>
+        <i class="fas fa-wallet" onclick="switchView('wallet-view', this)"></i>
+        <i class="fas fa-user" onclick="switchView('profile-view', this)"></i>
+    </nav>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyA-y05rnK5lD_v3G7YPS2wE1LlmAjrTz9c",
@@ -119,84 +127,70 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
-        let userCached = null;
+        let myData = null;
 
         onAuthStateChanged(auth, async (user) => {
             if (user && user.emailVerified) {
                 const snap = await getDoc(doc(db, "usuarios", user.uid));
                 if (snap.exists()) {
-                    userCached = { id: user.uid, ...snap.data() };
-                    renderProfile();
-                    loadMyPosts();
+                    myData = { id: user.uid, ...snap.data() };
+                    updateUI();
                 }
             } else { window.location.href = "index.html"; }
         });
 
-        // CAMBIO DE VISTAS CON ANIMACIÓN
-        window.switchView = (viewId, el) => {
-            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+        function updateUI() {
+            document.getElementById('p-name').innerText = "@" + myData.username;
+            document.getElementById('w-balance').innerText = (myData.saldo || 0).toFixed(2);
+            document.getElementById('p-bio').innerText = myData.biografia || "Toca para añadir bio...";
             
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            if(myData.fotoPerfil) document.getElementById('p-avatar-box').innerHTML = `<img src="${myData.fotoPerfil}">`;
+            else document.getElementById('p-avatar-box').innerText = myData.username[0].toUpperCase();
+            
+            if(myData.fotoPortada) document.getElementById('p-cover').src = myData.fotoPortada;
+        }
+
+        window.switchView = (id, el) => {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            // Estética de iconos
+            document.querySelectorAll('.nav-link, .mobile-nav i').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
         };
 
-        function renderProfile() {
-            document.getElementById('p-username').innerText = "@" + userCached.username;
-            document.getElementById('p-role').innerText = userCached.rol;
-            document.getElementById('p-bio').innerText = userCached.biografia || "Haz clic para añadir una biografía...";
-            
-            if (userCached.fotoPerfil) {
-                document.getElementById('avatar-display').innerHTML = `<img src="${userCached.fotoPerfil}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
-            } else {
-                document.getElementById('avatar-display').innerText = userCached.username[0].toUpperCase();
-            }
-            
-            if (userCached.fotoPortada) {
-                document.getElementById('cover-display').src = userCached.fotoPortada;
-                document.getElementById('cover-display').style.opacity = "1";
-            }
-        }
-
-        // ACTUALIZAR FOTOS (PORTADA Y AVATAR)
         window.updatePhoto = async (field, input) => {
             const file = input.files[0];
-            if (!file) return;
-            if (file.size > 1048576) return alert("Imagen muy pesada (Max 1MB)");
-
+            if(!file) return;
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = async () => {
-                const updateData = {};
-                updateData[field] = reader.result;
-                await updateDoc(doc(db, "usuarios", userCached.id), updateData);
-                userCached[field] = reader.result;
-                renderProfile();
+                const updateObj = {}; updateObj[field] = reader.result;
+                await updateDoc(doc(db, "usuarios", myData.id), updateObj);
+                myData[field] = reader.result;
+                updateUI();
+                input.value = ""; // PARCHE PARA PODER CAMBIAR SEGUIDO
             };
         };
 
-        // EDITAR BIOGRAFÍA
-        window.editBio = async () => {
-            const newBio = prompt("Escribe tu nueva biografía:", userCached.biografia || "");
-            if (newBio !== null) {
-                await updateDoc(doc(db, "usuarios", userCached.id), { biografia: newBio });
-                userCached.biografia = newBio;
-                renderProfile();
+        window.addMoney = async () => {
+            const amount = parseFloat(prompt("¿Cuánto quieres recargar? (Simulado)", "50"));
+            if(amount > 0) {
+                const newBalance = (myData.saldo || 0) + amount;
+                await updateDoc(doc(db, "usuarios", myData.id), { saldo: newBalance });
+                myData.saldo = newBalance;
+                updateUI();
+                alert("¡Saldo recargado!");
             }
         };
 
-        function loadMyPosts() {
-            const q = query(collection(db, "posts"), where("creadorId", "==", userCached.id));
-            onSnapshot(q, (snap) => {
-                const grid = document.getElementById('my-posts');
-                grid.innerHTML = "";
-                snap.forEach(doc => {
-                    const post = doc.data();
-                    grid.innerHTML += `<div class="grid-item"><img src="${post.url}"></div>`;
-                });
-            });
-        }
+        window.editBio = async () => {
+            const b = prompt("Tu biografía:", myData.biografia || "");
+            if(b !== null) {
+                await updateDoc(doc(db, "usuarios", myData.id), { biografia: b });
+                myData.biografia = b;
+                updateUI();
+            }
+        };
 
         window.auth = auth;
     </script>
