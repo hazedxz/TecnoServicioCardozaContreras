@@ -18,26 +18,37 @@
         .nav-link { display: flex; align-items: center; gap: 15px; padding: 16px; border-radius: 18px; color: #888; text-decoration: none; font-weight: 600; transition: 0.3s; margin-bottom: 8px; cursor: pointer; }
         .nav-link.active { background: #1a1a1a; color: var(--primary); }
 
-        /* CONTENIDO */
+        /* ÁREA DE CONTENIDO */
         main.content-area { flex-grow: 1; overflow-y: auto; scrollbar-width: none; position: relative; padding-bottom: 100px; }
         .view-section { display: none; animation: fadeIn 0.4s ease; }
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* POSTS & LIKES */
+        /* FEED & POSTS */
         .post-card { background: var(--card); border-radius: 25px; border: 1px solid var(--border); margin: 20px auto; max-width: 500px; overflow: hidden; }
         .post-img { width: 100%; aspect-ratio: 1/1; position: relative; background: #000; }
         .post-img img { width: 100%; height: 100%; object-fit: cover; }
-        .blur-lock { position: absolute; inset: 0; backdrop-filter: blur(40px); background: rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .blur-lock { position: absolute; inset: 0; backdrop-filter: blur(50px); background: rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
         .post-actions { padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-top: 1px solid var(--border); }
         .like-btn { cursor: pointer; transition: 0.3s; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
         .like-btn.active { color: var(--primary); }
-        .like-btn.disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* BILLETERA & PERFIL */
+        .wallet-box { background: linear-gradient(135deg, #1a1a1a 0%, #000 100%); padding: 40px; border-radius: 30px; border: 1px solid var(--border); text-align: center; margin-top: 20px; }
+        .profile-header { position: relative; width: 100%; height: 200px; background: #151515; }
+        .avatar-main { position: absolute; bottom: -50px; left: 20px; width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--bg); background: var(--primary); overflow: hidden; }
+        .avatar-main img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* NUEVO SELECTOR DE FOTOS (PREMIUM) */
+        .drop-zone { border: 2px dashed #333; border-radius: 20px; padding: 40px; text-align: center; cursor: pointer; transition: 0.3s; margin-top: 15px; }
+        .drop-zone:hover { border-color: var(--primary); background: rgba(250, 0, 80, 0.05); }
+        .drop-zone i { font-size: 2.5rem; color: #444; margin-bottom: 10px; }
+        .drop-zone.has-file { border-style: solid; border-color: var(--primary); color: var(--primary); }
 
         /* MODAL */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
         .modal-content { background: #111; padding: 30px; border-radius: 30px; width: 100%; max-width: 400px; border: 1px solid var(--border); }
-        .modal input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #222; background: #000; color: white; margin-top: 15px; }
+        .price-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #222; background: #000; color: white; margin-top: 15px; font-weight: 800; font-size: 1.1rem; text-align: center; }
 
         /* NAV MÓVIL */
         .mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: none; justify-content: space-around; padding: 20px; border-top: 1px solid var(--border); z-index: 100; }
@@ -48,22 +59,43 @@
 
     <div class="app-container">
         <aside class="sidebar">
-            <h2 style="margin-bottom: 30px;">V<span>EX</span></h2>
+            <h2 style="margin-bottom: 40px; font-weight: 800;">V<span>EX</span></h2>
             <div class="nav-link active" onclick="switchView('home-view', this)"><i class="fas fa-home"></i> <span>Feed</span></div>
             <div class="nav-link" onclick="switchView('profile-view', this)"><i class="fas fa-user"></i> <span>Mi Perfil</span></div>
             <div class="nav-link" onclick="switchView('wallet-view', this)"><i class="fas fa-wallet"></i> <span>Billetera</span></div>
+            <button onclick="auth.signOut()" style="margin-top:auto; background:none; border:none; color:#444; text-align:left; cursor:pointer;"><i class="fas fa-sign-out-alt"></i> Salir</button>
         </aside>
 
         <main class="content-area">
             <section id="home-view" class="view-section active">
                 <div style="padding: 20px;">
-                    <button onclick="openModal()" style="background:var(--primary); border:none; color:white; padding:15px; border-radius:15px; width:100%; font-weight:800; cursor:pointer; margin-bottom:20px;">+ NUEVA PUBLICACIÓN</button>
+                    <button onclick="openModal()" style="background:var(--primary); border:none; color:white; padding:18px; border-radius:20px; width:100%; font-weight:800; cursor:pointer; margin-bottom:20px; box-shadow: 0 10px 20px rgba(250,0,80,0.2);">NUEVA PUBLICACIÓN</button>
                     <div id="feed-container"></div>
                 </div>
             </section>
-            
-            <section id="profile-view" class="view-section"> </section>
-            <section id="wallet-view" class="view-section"> </section>
+
+            <section id="profile-view" class="view-section">
+                <div class="profile-header">
+                    <img id="p-cover" src="" style="width:100%; height:100%; object-fit:cover;">
+                    <div class="avatar-main" id="p-avatar-box">?</div>
+                </div>
+                <div style="padding: 60px 20px 20px 20px;">
+                    <h2 id="p-name" style="font-weight: 800;">@usuario</h2>
+                    <p id="p-rol" style="color:var(--primary); font-weight:800; font-size:0.8rem; letter-spacing:1px; margin-bottom:15px;">CREADOR</p>
+                    <p id="p-bio" onclick="editBio()" style="color:#666;">Añadir biografía...</p>
+                </div>
+            </section>
+
+            <section id="wallet-view" class="view-section">
+                <div style="padding: 25px;">
+                    <h1 style="font-weight: 800; margin-bottom: 25px;">Mi Saldo</h1>
+                    <div class="wallet-box">
+                        <p style="color:#666;">Saldo actual</p>
+                        <h2 style="font-size: 3.5rem; margin: 10px 0;">$<span id="w-balance">0.00</span></h2>
+                        <button onclick="addMoney()" style="background:white; color:black; border:none; padding:15px 30px; border-radius:15px; font-weight:800; cursor:pointer;">RECARGAR SALDO</button>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -76,11 +108,18 @@
 
     <div class="modal" id="uploadModal">
         <div class="modal-content">
-            <h2 style="font-weight: 800;">Publicar</h2>
-            <input type="file" id="fileInput" accept="image/*" style="border:none;">
-            <input type="number" id="postPrice" placeholder="Precio $ (0 para gratis)">
-            <button onclick="uploadPost()" id="btnUpload" style="background:var(--primary); color:white; border:none; width:100%; padding:15px; border-radius:12px; margin-top:20px; font-weight:800; cursor:pointer;">SUBIR AHORA</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:#555; width:100%; margin-top:10px; cursor:pointer;">Cancelar</button>
+            <h2 style="text-align:center; margin-bottom:20px;">Crear Post</h2>
+            
+            <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p id="fileNameDisplay">Toca para elegir una foto</p>
+                <input type="file" id="fileInput" hidden accept="image/*">
+            </div>
+
+            <input type="number" id="postPrice" class="price-input" placeholder="Precio en $ (0 = Gratis)">
+            
+            <button onclick="uploadPost()" id="btnUpload" style="background:var(--primary); color:white; border:none; width:100%; padding:18px; border-radius:15px; margin-top:20px; font-weight:800; cursor:pointer;">PUBLICAR</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:#555; width:100%; margin-top:15px; cursor:pointer;">Cancelar</button>
         </div>
     </div>
 
@@ -107,9 +146,18 @@
             if (user && user.emailVerified) {
                 const snap = await getDoc(doc(db, "usuarios", user.uid));
                 myData = { id: user.uid, ...snap.data() };
+                updateMyUI();
                 loadFeed();
             } else { window.location.href = "index.html"; }
         });
+
+        function updateMyUI() {
+            document.getElementById('p-name').innerText = "@" + myData.username;
+            document.getElementById('w-balance').innerText = (myData.saldo || 0).toFixed(2);
+            document.getElementById('p-bio').innerText = myData.biografia || "Añadir biografía...";
+            if(myData.fotoPerfil) document.getElementById('p-avatar-box').innerHTML = `<img src="${myData.fotoPerfil}">`;
+            if(myData.fotoPortada) document.getElementById('p-cover').src = myData.fotoPortada;
+        }
 
         window.switchView = (id, el) => {
             document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
@@ -118,14 +166,31 @@
             el.classList.add('active');
         };
 
+        // GESTIÓN DEL NUEVO SELECTOR DE ARCHIVOS
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+        fileInput.addEventListener('change', () => {
+            if(fileInput.files[0]) {
+                fileNameDisplay.innerText = "Imagen seleccionada: " + fileInput.files[0].name;
+                dropZone.classList.add('has-file');
+            }
+        });
+
         window.openModal = () => document.getElementById('uploadModal').style.display = 'flex';
-        window.closeModal = () => document.getElementById('uploadModal').style.display = 'none';
+        window.closeModal = () => {
+            document.getElementById('uploadModal').style.display = 'none';
+            fileInput.value = "";
+            dropZone.classList.remove('has-file');
+            fileNameDisplay.innerText = "Toca para elegir una foto";
+        };
 
         window.uploadPost = async () => {
-            const file = document.getElementById('fileInput').files[0];
+            const file = fileInput.files[0];
             const price = document.getElementById('postPrice').value || 0;
             const btn = document.getElementById('btnUpload');
-            if(!file) return alert("Selecciona una imagen");
+            if(!file) return alert("Elige una foto primero");
 
             btn.innerText = "SUBIENDO..."; btn.disabled = true;
             const reader = new FileReader();
@@ -134,9 +199,9 @@
                 await addDoc(collection(db, "posts"), {
                     creador: myData.username, creadorId: myData.id,
                     url: reader.result, precio: parseFloat(price),
-                    fecha: new Date(), likes: []
+                    fecha: new Date(), likes: [], compradores: []
                 });
-                closeModal(); btn.innerText = "SUBIR AHORA"; btn.disabled = false;
+                closeModal(); btn.innerText = "PUBLICAR"; btn.disabled = false;
             };
         };
 
@@ -149,7 +214,8 @@
                     const post = d.data();
                     const postId = d.id;
                     const isOwner = post.creadorId === myData.id;
-                    const isLocked = post.precio > 0 && !isOwner; // Simplificado para este paso
+                    const hasBought = post.compradores && post.compradores.includes(myData.id);
+                    const isLocked = post.precio > 0 && !isOwner && !hasBought;
                     const hasLiked = post.likes && post.likes.includes(myData.id);
 
                     container.innerHTML += `
@@ -158,14 +224,14 @@
                             <div class="post-img">
                                 ${isLocked ? `
                                     <div class="blur-lock">
-                                        <i class="fas fa-lock" style="font-size:2rem; color:var(--primary); margin-bottom:10px;"></i>
-                                        <button style="background:var(--primary); border:none; color:white; padding:10px 20px; border-radius:12px; font-weight:800;">DESBLOQUEAR $${post.precio}</button>
+                                        <i class="fas fa-lock" style="font-size:2.5rem; color:var(--primary); margin-bottom:15px;"></i>
+                                        <button onclick="buyPost('${postId}', ${post.precio})" style="background:var(--primary); border:none; color:white; padding:12px 25px; border-radius:15px; font-weight:800; cursor:pointer;">DESBLOQUEAR $${post.precio}</button>
                                     </div>
                                 ` : `<img src="${post.url}">`}
                             </div>
                             <div class="post-actions">
                                 <div class="like-btn ${isLocked ? 'disabled' : ''} ${hasLiked ? 'active' : ''}" 
-                                     onclick="${isLocked ? '' : `toggleLike('${postId}', ${hasLiked})`}">
+                                     onclick="${isLocked ? '' : `toggleLike('${postId}', ${hasLiked})`}" style="${isLocked ? 'opacity:0.2' : ''}">
                                     <i class="${hasLiked ? 'fas' : 'far'} fa-heart"></i> 
                                     <span>${post.likes ? post.likes.length : 0}</span>
                                 </div>
@@ -175,12 +241,33 @@
             });
         }
 
+        window.buyPost = async (postId, price) => {
+            if((myData.saldo || 0) < price) return alert("Saldo insuficiente. Ve a la Billetera.");
+            if(confirm(`¿Quieres comprar este post por $${price}?`)) {
+                const newBalance = myData.saldo - price;
+                await updateDoc(doc(db, "usuarios", myData.id), { saldo: newBalance });
+                await updateDoc(doc(db, "posts", postId), { compradores: arrayUnion(myData.id) });
+                myData.saldo = newBalance;
+                updateMyUI();
+                alert("¡Post desbloqueado!");
+            }
+        };
+
         window.toggleLike = async (postId, hasLiked) => {
             const postRef = doc(db, "posts", postId);
-            await updateDoc(postRef, {
-                likes: hasLiked ? arrayRemove(myData.id) : arrayUnion(myData.id)
-            });
+            await updateDoc(postRef, { likes: hasLiked ? arrayRemove(myData.id) : arrayUnion(myData.id) });
         };
+
+        window.addMoney = async () => {
+            const amount = parseFloat(prompt("¿Cuánto quieres recargar? (Demo)", "50"));
+            if(amount > 0) {
+                const b = (myData.saldo || 0) + amount;
+                await updateDoc(doc(db, "usuarios", myData.id), { saldo: b });
+                myData.saldo = b; updateMyUI();
+            }
+        };
+
+        window.auth = auth;
     </script>
 </body>
 </html>
