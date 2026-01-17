@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-Exclusive | Dashboard Pro</title>
+    <title>V-Exclusive | Mi Perfil</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,103 +11,102 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; overflow: hidden; }
 
-        /* GRID RESPONSIVO PC */
-        .app-grid { display: grid; grid-template-columns: 280px 1fr 350px; height: 100vh; max-width: 1600px; margin: 0 auto; }
+        .app-grid { display: grid; grid-template-columns: 280px 1fr; height: 100vh; max-width: 1400px; margin: 0 auto; }
 
-        /* BARRA LATERAL */
-        aside.sidebar { padding: 30px; border-right: 1px solid var(--border); display: flex; flex-direction: column; }
-        .logo { font-size: 2rem; font-weight: 800; margin-bottom: 40px; color: white; text-decoration: none; }
-        .logo span { color: var(--primary); }
-        .nav-link { display: flex; align-items: center; gap: 15px; padding: 16px; border-radius: 18px; color: #888; text-decoration: none; font-weight: 600; transition: 0.3s; margin-bottom: 8px; cursor: pointer; }
-        .nav-link:hover, .nav-link.active { background: #1a1a1a; color: white; }
-        .btn-post { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 18px; font-weight: 800; cursor: pointer; margin-top: 20px; transition: 0.3s; width: 100%; }
-        .btn-post:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(250,0,80,0.3); }
+        /* MENU LATERAL */
+        aside.sidebar { padding: 30px; border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; background: var(--bg); }
+        .nav-link { display: flex; align-items: center; gap: 15px; padding: 16px; border-radius: 18px; color: #888; text-decoration: none; font-weight: 600; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); margin-bottom: 8px; cursor: pointer; }
+        .nav-link:hover, .nav-link.active { background: #1a1a1a; color: white; transform: translateX(5px); }
+        .nav-link.active { color: var(--primary); background: rgba(250, 0, 80, 0.05); }
 
-        /* FEED CENTRAL */
-        main.feed { border-right: 1px solid var(--border); overflow-y: auto; padding: 30px; scrollbar-width: none; }
-        main.feed::-webkit-scrollbar { display: none; }
-        .feed-container { max-width: 600px; margin: 0 auto; }
+        /* CONTENEDOR DE VISTAS (TRANSICIONES) */
+        main.content-area { overflow-y: auto; scrollbar-width: none; position: relative; }
+        .view-section { display: none; animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        .view-section.active { display: block; }
         
-        .post-card { background: var(--card); border-radius: 30px; border: 1px solid var(--border); margin-bottom: 30px; overflow: hidden; animation: fadeInUp 0.5s ease; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        /* DISEÑO DEL PERFIL */
+        .profile-header { position: relative; width: 100%; height: 280px; background: #151515; }
+        .cover-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
         
-        .post-user { padding: 15px 20px; display: flex; align-items: center; gap: 10px; font-weight: 700; border-bottom: 1px solid var(--border); }
-        .post-img { width: 100%; aspect-ratio: 1/1; position: relative; background: #000; }
-        .post-img img { width: 100%; height: 100%; object-fit: cover; }
-        .blur-lock { position: absolute; inset: 0; backdrop-filter: blur(50px); background: rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .avatar-container { position: absolute; bottom: -60px; left: 40px; width: 140px; height: 140px; }
+        .profile-avatar { width: 100%; height: 100%; border-radius: 50%; border: 6px solid var(--bg); object-fit: cover; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800; }
+        
+        .edit-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; cursor: pointer; }
+        .avatar-container:hover .edit-overlay { opacity: 1; }
 
-        /* WIDGET DERECHA */
-        .widget-area { padding: 30px; }
-        .profile-card { background: linear-gradient(145deg, #151515, #0a0a0a); padding: 30px; border-radius: 35px; border: 1px solid var(--border); text-align: center; }
-        .avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--primary); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; box-shadow: 0 10px 20px rgba(250,0,80,0.2); }
+        .profile-info { margin-top: 80px; padding: 0 40px; }
+        .bio-box { margin-top: 15px; color: #888; line-height: 1.6; max-width: 500px; }
+        
+        /* BOTONES DE EDICIÓN */
+        .btn-edit-cover { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.3s; }
+        .btn-edit-cover:hover { background: var(--primary); }
 
-        /* MODAL */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
-        .modal-content { background: #111; padding: 35px; border-radius: 35px; width: 100%; max-width: 450px; border: 1px solid var(--border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        .modal input { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #222; background: #000; color: white; margin-top: 15px; }
+        /* FEED GRID */
+        .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 40px; }
+        .grid-item { aspect-ratio: 1/1; background: #111; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); }
+        .grid-item img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* RESPONSIVO */
-        @media (max-width: 1100px) { .app-grid { grid-template-columns: 80px 1fr; } .sidebar span, .widget-area { display: none; } }
-        @media (max-width: 768px) { .app-grid { display: block; } .sidebar { display: none; } main.feed { height: 100vh; padding-bottom: 100px; } .nav-mobile { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; justify-content: space-around; padding: 20px; border-top: 1px solid var(--border); } }
-        @media (min-width: 769px) { .nav-mobile { display: none; } }
+        /* OCULTAR INPUTS DE ARCHIVO */
+        .file-input { display: none; }
     </style>
 </head>
 <body>
 
     <div class="app-grid">
         <aside class="sidebar">
-            <a href="#" class="logo">V<span>EX</span></a>
-            <div class="nav-link active"><i class="fas fa-home"></i> <span>Feed Principal</span></div>
+            <div style="font-size: 2rem; font-weight: 800; margin-bottom: 40px;">V<span>EX</span></div>
+            <div class="nav-link active" onclick="switchView('home-view', this)"><i class="fas fa-home"></i> <span>Feed</span></div>
+            <div class="nav-link" onclick="switchView('profile-view', this)"><i class="fas fa-user"></i> <span>Mi Perfil</span></div>
             <div class="nav-link"><i class="fas fa-wallet"></i> <span>Billetera</span></div>
-            <div class="nav-link"><i class="fas fa-user"></i> <span>Mi Perfil</span></div>
-            <button class="btn-post" onclick="openModal()">+ PUBLICAR</button>
-            <button onclick="auth.signOut()" style="margin-top:auto; background:none; border:none; color:#444; cursor:pointer; text-align:left;">Cerrar Sesión</button>
+            <button class="nav-link" onclick="auth.signOut()" style="margin-top:auto; background:none; border:none;"><i class="fas fa-sign-out-alt"></i> <span>Salir</span></button>
         </aside>
 
-        <main class="feed">
-            <div class="feed-container">
-                <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 30px;">Descubrir</h1>
-                <div id="posts-container">
-                    </div>
-            </div>
-        </main>
-
-        <aside class="widget-area">
-            <div class="profile-card">
-                <div class="avatar" id="u-avatar">?</div>
-                <h3 id="u-username">@usuario</h3>
-                <p id="u-rol" style="color:#555; font-size: 0.75rem; text-transform: uppercase; margin-top: 5px; letter-spacing: 1px;">Rol</p>
-                <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div style="background:#000; padding:15px; border-radius:20px;"><b>$0</b><br><small style="color:#444">Saldo</small></div>
-                    <div style="background:#000; padding:15px; border-radius:20px;"><b>0</b><br><small style="color:#444">Fans</small></div>
+        <main class="content-area">
+            
+            <section id="home-view" class="view-section active">
+                <div style="padding: 40px; max-width: 700px; margin: 0 auto;">
+                    <h1 style="margin-bottom: 30px;">Explorar</h1>
+                    <div id="global-feed">
+                        </div>
                 </div>
-            </div>
-        </aside>
-    </div>
+            </section>
 
-    <div class="nav-mobile">
-        <i class="fas fa-home" style="color:var(--primary)"></i>
-        <i class="fas fa-plus-circle" onclick="openModal()" style="font-size: 1.6rem;"></i>
-        <i class="fas fa-user"></i>
-    </div>
+            <section id="profile-view" class="view-section">
+                <div class="profile-header">
+                    <img id="cover-display" src="" class="cover-img">
+                    <button class="btn-edit-cover" onclick="document.getElementById('cover-input').click()"><i class="fas fa-camera"></i> Cambiar Portada</button>
+                    <input type="file" id="cover-input" class="file-input" onchange="updatePhoto('fotoPortada', this)">
+                    
+                    <div class="avatar-container">
+                        <div id="avatar-display" class="profile-avatar">?</div>
+                        <div class="edit-overlay" onclick="document.getElementById('avatar-input').click()"><i class="fas fa-camera"></i></div>
+                        <input type="file" id="avatar-input" class="file-input" onchange="updatePhoto('fotoPerfil', this)">
+                    </div>
+                </div>
 
-    <div class="modal" id="uploadModal">
-        <div class="modal-content">
-            <h2 style="font-weight: 800;">Nueva Publicación</h2>
-            <p style="color:#555; margin-bottom: 10px;">Elige una imagen y ponle un precio.</p>
-            <input type="file" id="fileInput" accept="image/*" style="border:none; padding:0;">
-            <input type="number" id="postPrice" placeholder="Precio en $ (ej: 4.99)">
-            <button class="btn-post" id="btnUpload" onclick="uploadPost()">PUBLICAR AHORA</button>
-            <button onclick="closeModal()" style="width:100%; background:none; border:none; color:#444; margin-top:15px; cursor:pointer;">Cancelar</button>
-        </div>
+                <div class="profile-info">
+                    <h1 id="p-username" style="font-size: 2rem; font-weight: 800;">@usuario</h1>
+                    <p id="p-role" style="color: var(--primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; margin-top: 5px;">Creador</p>
+                    <div class="bio-box" id="p-bio" onclick="editBio()">Toca aquí para escribir algo sobre ti...</div>
+                </div>
+
+                <div class="posts-grid" id="my-posts">
+                    </div>
+            </section>
+
+        </main>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIGURACIÓN DE TU FIREBASE
         const firebaseConfig = { 
             apiKey: "AIzaSyA-y05rnK5lD_v3G7YPS2wE1LlmAjrTz9c",
             authDomain: "v-exclusive.firebaseapp.com",
@@ -121,86 +120,80 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let myData = null;
+        let userCached = null;
 
-        // VERIFICAR USUARIO
         onAuthStateChanged(auth, async (user) => {
             if (user && user.emailVerified) {
                 const snap = await getDoc(doc(db, "usuarios", user.uid));
                 if (snap.exists()) {
-                    myData = { id: user.uid, ...snap.data() };
-                    document.getElementById('u-username').innerText = "@" + myData.username;
-                    document.getElementById('u-rol').innerText = myData.rol;
-                    document.getElementById('u-avatar').innerText = myData.username[0].toUpperCase();
-                    loadFeed();
+                    userCached = { id: user.uid, ...snap.data() };
+                    renderProfile();
+                    loadMyPosts();
                 }
-            } else {
-                window.location.href = "index.html";
-            }
+            } else { window.location.href = "index.html"; }
         });
 
-        // MODAL LOGIC
-        window.openModal = () => document.getElementById('uploadModal').style.display = 'flex';
-        window.closeModal = () => document.getElementById('uploadModal').style.display = 'none';
+        // CAMBIO DE VISTAS CON ANIMACIÓN
+        window.switchView = (viewId, el) => {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            el.classList.add('active');
+        };
 
-        // SUBIR CONTENIDO
-        window.uploadPost = async () => {
-            const file = document.getElementById('fileInput').files[0];
-            const price = document.getElementById('postPrice').value;
-            const btn = document.getElementById('btnUpload');
+        function renderProfile() {
+            document.getElementById('p-username').innerText = "@" + userCached.username;
+            document.getElementById('p-role').innerText = userCached.rol;
+            document.getElementById('p-bio').innerText = userCached.biografia || "Haz clic para añadir una biografía...";
+            
+            if (userCached.fotoPerfil) {
+                document.getElementById('avatar-display').innerHTML = `<img src="${userCached.fotoPerfil}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+            } else {
+                document.getElementById('avatar-display').innerText = userCached.username[0].toUpperCase();
+            }
+            
+            if (userCached.fotoPortada) {
+                document.getElementById('cover-display').src = userCached.fotoPortada;
+                document.getElementById('cover-display').style.opacity = "1";
+            }
+        }
 
-            if (!file || !price) return alert("Completa los campos.");
-            if (file.size > 1048576) return alert("Imagen demasiado grande (máx 1MB).");
+        // ACTUALIZAR FOTOS (PORTADA Y AVATAR)
+        window.updatePhoto = async (field, input) => {
+            const file = input.files[0];
+            if (!file) return;
+            if (file.size > 1048576) return alert("Imagen muy pesada (Max 1MB)");
 
-            btn.innerText = "SUBIENDO...";
-            btn.disabled = true;
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const updateData = {};
+                updateData[field] = reader.result;
+                await updateDoc(doc(db, "usuarios", userCached.id), updateData);
+                userCached[field] = reader.result;
+                renderProfile();
+            };
+        };
 
-            try {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = async () => {
-                    await addDoc(collection(db, "posts"), {
-                        creador: myData.username,
-                        creadorId: myData.id,
-                        url: reader.result,
-                        precio: price,
-                        fecha: new Date()
-                    });
-                    alert("¡Publicado!");
-                    closeModal();
-                    btn.innerText = "PUBLICAR AHORA";
-                    btn.disabled = false;
-                };
-            } catch (e) {
-                alert("Error: " + e.message);
-                btn.disabled = false;
+        // EDITAR BIOGRAFÍA
+        window.editBio = async () => {
+            const newBio = prompt("Escribe tu nueva biografía:", userCached.biografia || "");
+            if (newBio !== null) {
+                await updateDoc(doc(db, "usuarios", userCached.id), { biografia: newBio });
+                userCached.biografia = newBio;
+                renderProfile();
             }
         };
 
-        // CARGAR FEED EN TIEMPO REAL
-        function loadFeed() {
-            const q = query(collection(db, "posts"), orderBy("fecha", "desc"));
+        function loadMyPosts() {
+            const q = query(collection(db, "posts"), where("creadorId", "==", userCached.id));
             onSnapshot(q, (snap) => {
-                const container = document.getElementById('posts-container');
-                container.innerHTML = "";
-                snap.forEach(d => {
-                    const post = d.data();
-                    const isOwner = post.creadorId === myData.id;
-                    container.innerHTML += `
-                        <div class="post-card">
-                            <div class="post-user">
-                                <div style="width:30px; height:30px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; font-size:12px;">${post.creador[0].toUpperCase()}</div>
-                                @${post.creador}
-                            </div>
-                            <div class="post-img">
-                                ${isOwner ? `<img src="${post.url}">` : `
-                                    <div class="blur-lock">
-                                        <i class="fas fa-lock" style="font-size:2rem; color:var(--primary); margin-bottom:15px;"></i>
-                                        <button style="background:var(--primary); color:white; border:none; padding:12px 25px; border-radius:15px; font-weight:800; cursor:pointer; font-size:1rem;">DESBLOQUEAR $${post.precio}</button>
-                                    </div>
-                                `}
-                            </div>
-                        </div>`;
+                const grid = document.getElementById('my-posts');
+                grid.innerHTML = "";
+                snap.forEach(doc => {
+                    const post = doc.data();
+                    grid.innerHTML += `<div class="grid-item"><img src="${post.url}"></div>`;
                 });
             });
         }
