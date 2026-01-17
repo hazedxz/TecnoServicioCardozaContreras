@@ -11,95 +11,59 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; overflow: hidden; }
 
-        /* DISEÑO BASE (PC) */
         .app-container { display: flex; height: 100vh; max-width: 1400px; margin: 0 auto; }
 
-        /* MENÚ LATERAL (Se oculta en móvil) */
+        /* SIDEBAR PC */
         aside.sidebar { width: 280px; padding: 30px; border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
-        .logo { font-size: 1.8rem; font-weight: 800; margin-bottom: 40px; color: white; text-decoration: none; }
-        .logo span { color: var(--primary); }
         .nav-link { display: flex; align-items: center; gap: 15px; padding: 16px; border-radius: 18px; color: #888; text-decoration: none; font-weight: 600; transition: 0.3s; margin-bottom: 8px; cursor: pointer; }
-        .nav-link:hover, .nav-link.active { background: #1a1a1a; color: white; }
-        .nav-link.active { color: var(--primary); }
+        .nav-link.active { background: #1a1a1a; color: var(--primary); }
 
-        /* ÁREA DE CONTENIDO */
-        main.content-area { flex-grow: 1; overflow-y: auto; scrollbar-width: none; position: relative; padding-bottom: 80px; }
+        /* CONTENIDO */
+        main.content-area { flex-grow: 1; overflow-y: auto; scrollbar-width: none; position: relative; padding-bottom: 100px; }
         .view-section { display: none; animation: fadeIn 0.4s ease; }
         .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* PERFIL ESTILO PROFESIONAL */
-        .profile-header { position: relative; width: 100%; height: 220px; background: #151515; }
-        .cover-img { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-box { position: absolute; bottom: -50px; left: 20px; width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--bg); background: var(--primary); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; }
-        .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
-        .profile-meta { margin-top: 60px; padding: 0 20px; }
+        /* POSTS & LIKES */
+        .post-card { background: var(--card); border-radius: 25px; border: 1px solid var(--border); margin: 20px auto; max-width: 500px; overflow: hidden; }
+        .post-img { width: 100%; aspect-ratio: 1/1; position: relative; background: #000; }
+        .post-img img { width: 100%; height: 100%; object-fit: cover; }
+        .blur-lock { position: absolute; inset: 0; backdrop-filter: blur(40px); background: rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .post-actions { padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-top: 1px solid var(--border); }
+        .like-btn { cursor: pointer; transition: 0.3s; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+        .like-btn.active { color: var(--primary); }
+        .like-btn.disabled { opacity: 0.3; cursor: not-allowed; }
 
-        /* BILLETERA */
-        .wallet-card { background: linear-gradient(135deg, #1a1a1a 0%, #000 100%); padding: 30px; border-radius: 30px; border: 1px solid var(--border); text-align: center; margin: 20px; }
-        .balance { font-size: 3rem; font-weight: 800; margin: 15px 0; color: #fff; }
+        /* MODAL */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: #111; padding: 30px; border-radius: 30px; width: 100%; max-width: 400px; border: 1px solid var(--border); }
+        .modal input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #222; background: #000; color: white; margin-top: 15px; }
 
-        /* BARRA MÓVIL (Solo aparece en pantallas pequeñas) */
-        .mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: none; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 100; }
-        .mobile-nav i { font-size: 1.4rem; color: #666; cursor: pointer; }
-        .mobile-nav i.active { color: var(--primary); }
-
-        /* RESPONSIVO FINAL */
-        @media (max-width: 850px) {
-            aside.sidebar { display: none; }
-            .mobile-nav { display: flex; }
-            .profile-header { height: 160px; }
-            .avatar-box { width: 90px; height: 90px; bottom: -45px; }
-        }
+        /* NAV MÓVIL */
+        .mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: none; justify-content: space-around; padding: 20px; border-top: 1px solid var(--border); z-index: 100; }
+        @media (max-width: 850px) { aside.sidebar { display: none; } .mobile-nav { display: flex; } }
     </style>
 </head>
 <body>
 
     <div class="app-container">
         <aside class="sidebar">
-            <a href="#" class="logo">V<span>EX</span></a>
+            <h2 style="margin-bottom: 30px;">V<span>EX</span></h2>
             <div class="nav-link active" onclick="switchView('home-view', this)"><i class="fas fa-home"></i> <span>Feed</span></div>
             <div class="nav-link" onclick="switchView('profile-view', this)"><i class="fas fa-user"></i> <span>Mi Perfil</span></div>
             <div class="nav-link" onclick="switchView('wallet-view', this)"><i class="fas fa-wallet"></i> <span>Billetera</span></div>
-            <button onclick="auth.signOut()" style="margin-top:auto; background:none; border:none; color:#444; text-align:left; cursor:pointer;"><i class="fas fa-sign-out-alt"></i> Salir</button>
         </aside>
 
         <main class="content-area">
-            
             <section id="home-view" class="view-section active">
-                <div style="padding: 25px;">
-                    <h1 style="font-weight: 800; margin-bottom: 20px;">Para ti</h1>
-                    <button onclick="openModal()" style="background:var(--primary); border:none; color:white; padding:12px 20px; border-radius:12px; font-weight:800; margin-bottom:20px; cursor:pointer; width:100%;">+ NUEVA PUBLICACIÓN</button>
+                <div style="padding: 20px;">
+                    <button onclick="openModal()" style="background:var(--primary); border:none; color:white; padding:15px; border-radius:15px; width:100%; font-weight:800; cursor:pointer; margin-bottom:20px;">+ NUEVA PUBLICACIÓN</button>
                     <div id="feed-container"></div>
                 </div>
             </section>
-
-            <section id="profile-view" class="view-section">
-                <div class="profile-header">
-                    <img id="p-cover" src="" class="cover-img">
-                    <button onclick="document.getElementById('in-cover').click()" style="position:absolute; top:15px; right:15px; background:rgba(0,0,0,0.5); border:none; color:white; padding:8px 12px; border-radius:8px; cursor:pointer;"><i class="fas fa-camera"></i></button>
-                    <input type="file" id="in-cover" style="display:none" onchange="updatePhoto('fotoPortada', this)">
-                    <div class="avatar-box" id="p-avatar-box" onclick="document.getElementById('in-avatar').click()" style="cursor:pointer;">?</div>
-                    <input type="file" id="in-avatar" style="display:none" onchange="updatePhoto('fotoPerfil', this)">
-                </div>
-                <div class="profile-meta">
-                    <h2 id="p-name" style="font-weight: 800;">@usuario</h2>
-                    <p id="p-rol-label" style="color:var(--primary); font-size:0.8rem; font-weight:800; margin-bottom:10px;">CREADOR</p>
-                    <p id="p-bio" onclick="editBio()" style="color:#888; cursor:pointer;">Haz clic para añadir biografía...</p>
-                </div>
-            </section>
-
-            <section id="wallet-view" class="view-section">
-                <div style="padding: 25px;">
-                    <h1 style="font-weight: 800; margin-bottom: 20px;">Mi Billetera</h1>
-                    <div class="wallet-card">
-                        <p style="color:#888; font-weight:600;">Saldo Disponible</p>
-                        <div class="balance">$<span id="w-balance">0.00</span></div>
-                        <button onclick="addMoney()" style="background:white; color:black; border:none; padding:15px 30px; border-radius:15px; font-weight:800; cursor:pointer;">RECARGAR SALDO</button>
-                    </div>
-                </div>
-            </section>
-
+            
+            <section id="profile-view" class="view-section"> </section>
+            <section id="wallet-view" class="view-section"> </section>
         </main>
     </div>
 
@@ -110,10 +74,20 @@
         <i class="fas fa-user" onclick="switchView('profile-view', this)"></i>
     </nav>
 
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <h2 style="font-weight: 800;">Publicar</h2>
+            <input type="file" id="fileInput" accept="image/*" style="border:none;">
+            <input type="number" id="postPrice" placeholder="Precio $ (0 para gratis)">
+            <button onclick="uploadPost()" id="btnUpload" style="background:var(--primary); color:white; border:none; width:100%; padding:15px; border-radius:12px; margin-top:20px; font-weight:800; cursor:pointer;">SUBIR AHORA</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:#555; width:100%; margin-top:10px; cursor:pointer;">Cancelar</button>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, onSnapshot, query, orderBy, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyA-y05rnK5lD_v3G7YPS2wE1LlmAjrTz9c",
@@ -132,67 +106,81 @@
         onAuthStateChanged(auth, async (user) => {
             if (user && user.emailVerified) {
                 const snap = await getDoc(doc(db, "usuarios", user.uid));
-                if (snap.exists()) {
-                    myData = { id: user.uid, ...snap.data() };
-                    updateUI();
-                }
+                myData = { id: user.uid, ...snap.data() };
+                loadFeed();
             } else { window.location.href = "index.html"; }
         });
-
-        function updateUI() {
-            document.getElementById('p-name').innerText = "@" + myData.username;
-            document.getElementById('w-balance').innerText = (myData.saldo || 0).toFixed(2);
-            document.getElementById('p-bio').innerText = myData.biografia || "Toca para añadir bio...";
-            
-            if(myData.fotoPerfil) document.getElementById('p-avatar-box').innerHTML = `<img src="${myData.fotoPerfil}">`;
-            else document.getElementById('p-avatar-box').innerText = myData.username[0].toUpperCase();
-            
-            if(myData.fotoPortada) document.getElementById('p-cover').src = myData.fotoPortada;
-        }
 
         window.switchView = (id, el) => {
             document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            // Estética de iconos
             document.querySelectorAll('.nav-link, .mobile-nav i').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
         };
 
-        window.updatePhoto = async (field, input) => {
-            const file = input.files[0];
-            if(!file) return;
+        window.openModal = () => document.getElementById('uploadModal').style.display = 'flex';
+        window.closeModal = () => document.getElementById('uploadModal').style.display = 'none';
+
+        window.uploadPost = async () => {
+            const file = document.getElementById('fileInput').files[0];
+            const price = document.getElementById('postPrice').value || 0;
+            const btn = document.getElementById('btnUpload');
+            if(!file) return alert("Selecciona una imagen");
+
+            btn.innerText = "SUBIENDO..."; btn.disabled = true;
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = async () => {
-                const updateObj = {}; updateObj[field] = reader.result;
-                await updateDoc(doc(db, "usuarios", myData.id), updateObj);
-                myData[field] = reader.result;
-                updateUI();
-                input.value = ""; // PARCHE PARA PODER CAMBIAR SEGUIDO
+                await addDoc(collection(db, "posts"), {
+                    creador: myData.username, creadorId: myData.id,
+                    url: reader.result, precio: parseFloat(price),
+                    fecha: new Date(), likes: []
+                });
+                closeModal(); btn.innerText = "SUBIR AHORA"; btn.disabled = false;
             };
         };
 
-        window.addMoney = async () => {
-            const amount = parseFloat(prompt("¿Cuánto quieres recargar? (Simulado)", "50"));
-            if(amount > 0) {
-                const newBalance = (myData.saldo || 0) + amount;
-                await updateDoc(doc(db, "usuarios", myData.id), { saldo: newBalance });
-                myData.saldo = newBalance;
-                updateUI();
-                alert("¡Saldo recargado!");
-            }
-        };
+        function loadFeed() {
+            const q = query(collection(db, "posts"), orderBy("fecha", "desc"));
+            onSnapshot(q, (snap) => {
+                const container = document.getElementById('feed-container');
+                container.innerHTML = "";
+                snap.forEach(d => {
+                    const post = d.data();
+                    const postId = d.id;
+                    const isOwner = post.creadorId === myData.id;
+                    const isLocked = post.precio > 0 && !isOwner; // Simplificado para este paso
+                    const hasLiked = post.likes && post.likes.includes(myData.id);
 
-        window.editBio = async () => {
-            const b = prompt("Tu biografía:", myData.biografia || "");
-            if(b !== null) {
-                await updateDoc(doc(db, "usuarios", myData.id), { biografia: b });
-                myData.biografia = b;
-                updateUI();
-            }
-        };
+                    container.innerHTML += `
+                        <div class="post-card">
+                            <div style="padding:15px; font-weight:800;">@${post.creador}</div>
+                            <div class="post-img">
+                                ${isLocked ? `
+                                    <div class="blur-lock">
+                                        <i class="fas fa-lock" style="font-size:2rem; color:var(--primary); margin-bottom:10px;"></i>
+                                        <button style="background:var(--primary); border:none; color:white; padding:10px 20px; border-radius:12px; font-weight:800;">DESBLOQUEAR $${post.precio}</button>
+                                    </div>
+                                ` : `<img src="${post.url}">`}
+                            </div>
+                            <div class="post-actions">
+                                <div class="like-btn ${isLocked ? 'disabled' : ''} ${hasLiked ? 'active' : ''}" 
+                                     onclick="${isLocked ? '' : `toggleLike('${postId}', ${hasLiked})`}">
+                                    <i class="${hasLiked ? 'fas' : 'far'} fa-heart"></i> 
+                                    <span>${post.likes ? post.likes.length : 0}</span>
+                                </div>
+                            </div>
+                        </div>`;
+                });
+            });
+        }
 
-        window.auth = auth;
+        window.toggleLike = async (postId, hasLiked) => {
+            const postRef = doc(db, "posts", postId);
+            await updateDoc(postRef, {
+                likes: hasLiked ? arrayRemove(myData.id) : arrayUnion(myData.id)
+            });
+        };
     </script>
 </body>
 </html>
