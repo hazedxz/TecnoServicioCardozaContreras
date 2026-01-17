@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-Exclusive | Premium Dashboard</title>
+    <title>V-Exclusive | Dashboard Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -27,6 +27,10 @@
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* TRANSICIÓN DE IMÁGENES */
+        .fade-in-img { opacity: 0; transition: opacity 0.5s ease-in-out; }
+        .fade-in-img.loaded { opacity: 1; }
+
         /* POST CARDS */
         .post-card { background: var(--card); border-radius: 25px; border: 1px solid var(--border); margin: 0 auto 20px auto; max-width: 500px; overflow: hidden; }
         .post-img { width: 100%; aspect-ratio: 1/1; position: relative; background: #000; }
@@ -39,23 +43,25 @@
         /* PERFIL */
         .profile-header { position: relative; width: 100%; height: 220px; background: #151515; border-radius: 0 0 30px 30px; overflow: hidden; }
         .cover-img { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-main { position: absolute; bottom: -50px; left: 25px; width: 110px; height: 110px; border-radius: 50%; border: 5px solid var(--bg); background: var(--primary); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; }
+        .avatar-main { position: absolute; bottom: -50px; left: 25px; width: 110px; height: 110px; border-radius: 50%; border: 5px solid var(--bg); background: var(--primary); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; cursor: pointer; }
         .avatar-main img { width: 100%; height: 100%; object-fit: cover; }
+        .btn-edit-cover { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.3s; }
+        .btn-edit-cover:hover { background: var(--primary); }
 
         /* BILLETERA */
         .wallet-card { background: linear-gradient(135deg, #1a1a1a 0%, #000 100%); padding: 40px; border-radius: 35px; border: 1px solid var(--border); text-align: center; margin-top: 20px; }
         .balance-num { font-size: 3.5rem; font-weight: 800; margin: 15px 0; }
 
-        /* SELECTOR DE FOTOS MODERNO */
+        /* MODALES PERSONALIZADOS */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: #111; padding: 30px; border-radius: 35px; width: 100%; max-width: 450px; border: 1px solid var(--border); animation: modalUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes modalUp { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .modal-input { width: 100%; padding: 18px; border-radius: 15px; border: 1px solid #222; background: #000; color: white; margin-top: 15px; font-size: 1.1rem; }
+        .modal-btn { background: var(--primary); color: white; border: none; width: 100%; padding: 20px; border-radius: 18px; margin-top: 20px; font-weight: 800; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .modal-btn:hover { transform: scale(1.02); }
         .upload-zone { border: 2px dashed #333; border-radius: 25px; padding: 40px; text-align: center; cursor: pointer; transition: 0.3s; margin: 20px 0; position: relative; }
         .upload-zone:hover { border-color: var(--primary); background: rgba(250, 0, 80, 0.05); }
-        .upload-zone i { font-size: 3rem; color: #444; margin-bottom: 15px; }
         .upload-zone.active { border-color: var(--primary); color: var(--primary); border-style: solid; }
-
-        /* MODAL */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
-        .modal-content { background: #111; padding: 30px; border-radius: 35px; width: 100%; max-width: 450px; border: 1px solid var(--border); }
-        .price-input { width: 100%; padding: 18px; border-radius: 15px; border: 1px solid #222; background: #000; color: white; margin-top: 15px; font-size: 1.2rem; text-align: center; font-weight: 800; }
 
         /* BARRA MÓVIL */
         .mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: none; justify-content: space-around; padding: 20px; border-top: 1px solid var(--border); z-index: 1000; }
@@ -81,20 +87,23 @@
 
         <main class="content-area">
             <section id="home-view" class="view-section active">
-                <button onclick="openModal()" style="background:var(--primary); color:white; border:none; width:100%; padding:20px; border-radius:20px; font-weight:800; cursor:pointer; margin-bottom:30px; font-size:1rem;">+ NUEVA PUBLICACIÓN</button>
+                <button onclick="openModal('uploadModal')" style="background:var(--primary); color:white; border:none; width:100%; padding:20px; border-radius:20px; font-weight:800; cursor:pointer; margin-bottom:30px; font-size:1rem;">+ NUEVA PUBLICACIÓN</button>
                 <div id="feed-container"></div>
             </section>
 
             <section id="profile-view" class="view-section">
                 <div class="profile-header">
-                    <img id="p-cover" src="" class="cover-img">
-                    <div class="avatar-main" id="p-avatar-box">?</div>
+                    <img id="p-cover" src="" class="cover-img fade-in-img">
+                    <button class="btn-edit-cover" onclick="document.getElementById('coverInput').click()"><i class="fas fa-camera"></i> Portada</button>
+                    <div class="avatar-main" id="p-avatar-box" onclick="document.getElementById('avatarInput').click()">?</div>
                 </div>
                 <div style="margin-top: 65px;">
                     <h2 id="p-name" style="font-size: 2rem; font-weight: 800;">@username</h2>
                     <p style="color:var(--primary); font-weight: 800; font-size: 0.9rem; margin-bottom: 15px;">CREADOR VERIFICADO</p>
-                    <p id="p-bio" onclick="editBio()" style="color:#777; line-height: 1.6; cursor:pointer;">Toca para añadir biografía...</p>
+                    <p id="p-bio" onclick="openModal('bioModal')" style="color:#777; line-height: 1.6; cursor:pointer;">Toca para añadir biografía...</p>
                 </div>
+                <input type="file" id="coverInput" hidden accept="image/*" onchange="updatePhoto('fotoPortada', this)">
+                <input type="file" id="avatarInput" hidden accept="image/*" onchange="updatePhoto('fotoPerfil', this)">
             </section>
 
             <section id="wallet-view" class="view-section">
@@ -102,7 +111,7 @@
                 <div class="wallet-card">
                     <p style="color:#888; font-weight: 600;">Saldo disponible</p>
                     <div class="balance-num">$<span id="w-balance">0.00</span></div>
-                    <button onclick="addMoney()" style="background:white; color:black; border:none; padding:18px 40px; border-radius:20px; font-weight:800; cursor:pointer; font-size:1rem;">RECARGAR FONDOS</button>
+                    <button onclick="openModal('walletModal')" style="background:white; color:black; border:none; padding:18px 40px; border-radius:20px; font-weight:800; cursor:pointer; font-size:1rem;">RECARGAR FONDOS</button>
                 </div>
             </section>
         </main>
@@ -110,7 +119,7 @@
 
     <nav class="mobile-nav">
         <i class="fas fa-home active" onclick="switchView('home-view', this)"></i>
-        <i class="fas fa-plus-circle" onclick="openModal()"></i>
+        <i class="fas fa-plus-circle" onclick="openModal('uploadModal')"></i>
         <i class="fas fa-wallet" onclick="switchView('wallet-view', this)"></i>
         <i class="fas fa-user" onclick="switchView('profile-view', this)"></i>
     </nav>
@@ -123,9 +132,27 @@
                 <p id="fileStatus">Toca para subir una foto</p>
                 <input type="file" id="fileInput" hidden accept="image/*">
             </div>
-            <input type="number" id="postPrice" class="price-input" placeholder="Precio $ (0 = Gratis)">
-            <button onclick="uploadPost()" id="btnUpload" style="background:var(--primary); color:white; border:none; width:100%; padding:20px; border-radius:18px; margin-top:20px; font-weight:800; cursor:pointer;">PUBLICAR AHORA</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:#555; width:100%; margin-top:15px; cursor:pointer;">Cancelar</button>
+            <input type="number" id="postPrice" class="modal-input" style="text-align:center; font-weight:800;" placeholder="Precio $ (0 = Gratis)">
+            <button onclick="uploadPost()" id="btnUpload" class="modal-btn">PUBLICAR AHORA</button>
+            <button onclick="closeModal('uploadModal')" style="background:none; border:none; color:#555; width:100%; margin-top:15px; cursor:pointer;">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="modal" id="bioModal">
+        <div class="modal-content">
+            <h2 style="text-align:center; font-weight:800; margin-bottom:20px;">Editar Biografía</h2>
+            <textarea id="bioInput" class="modal-input" rows="4" placeholder="Escribe algo sobre ti..."></textarea>
+            <button onclick="saveBio()" class="modal-btn">GUARDAR BIOGRAFÍA</button>
+            <button onclick="closeModal('bioModal')" style="background:none; border:none; color:#555; width:100%; margin-top:15px; cursor:pointer;">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="modal" id="walletModal">
+        <div class="modal-content">
+            <h2 style="text-align:center; font-weight:800; margin-bottom:20px;">Recargar Saldo</h2>
+            <input type="number" id="walletInput" class="modal-input" style="text-align:center; font-weight:800;" placeholder="Cantidad (ej: 50)">
+            <button onclick="saveMoney()" class="modal-btn">RECARGAR AHORA</button>
+            <button onclick="closeModal('walletModal')" style="background:none; border:none; color:#555; width:100%; margin-top:15px; cursor:pointer;">Cancelar</button>
         </div>
     </div>
 
@@ -161,8 +188,18 @@
             document.getElementById('p-name').innerText = "@" + myData.username;
             document.getElementById('w-balance').innerText = (myData.saldo || 0).toFixed(2);
             document.getElementById('p-bio').innerText = myData.biografia || "Haz clic para añadir biografía...";
-            if(myData.fotoPerfil) document.getElementById('p-avatar-box').innerHTML = `<img src="${myData.fotoPerfil}">`;
-            if(myData.fotoPortada) document.getElementById('p-cover').src = myData.fotoPortada;
+            
+            const avatarBox = document.getElementById('p-avatar-box');
+            if(myData.fotoPerfil) {
+                avatarBox.innerHTML = `<img src="${myData.fotoPerfil}" class="fade-in-img">`;
+                avatarBox.querySelector('img').onload = function() { this.classList.add('loaded'); };
+            }
+
+            const coverImg = document.getElementById('p-cover');
+            if(myData.fotoPortada) {
+                coverImg.src = myData.fotoPortada;
+                coverImg.onload = function() { this.classList.add('loaded'); };
+            }
         }
 
         window.switchView = (id, el) => {
@@ -172,7 +209,17 @@
             el.classList.add('active');
         };
 
-        // Lógica de archivos estética
+        // GESTIÓN DE MODALES
+        window.openModal = (id) => {
+            document.getElementById(id).style.display = 'flex';
+            if(id === 'bioModal') document.getElementById('bioInput').value = myData.biografia || '';
+        };
+        window.closeModal = (id) => {
+            document.getElementById(id).style.display = 'none';
+            if(id === 'uploadModal') resetUploadForm();
+        };
+
+        // Lógica de subida de posts
         const fileInput = document.getElementById('fileInput');
         fileInput.onchange = () => {
             if(fileInput.files[0]) {
@@ -181,13 +228,14 @@
             }
         };
 
-        window.openModal = () => document.getElementById('uploadModal').style.display = 'flex';
-        window.closeModal = () => {
-            document.getElementById('uploadModal').style.display = 'none';
+        function resetUploadForm() {
             fileInput.value = "";
             document.getElementById('dropZone').classList.remove('active');
             document.getElementById('fileStatus').innerText = "Toca para subir una foto";
-        };
+            document.getElementById('postPrice').value = "";
+            document.getElementById('btnUpload').innerText = "PUBLICAR AHORA";
+            document.getElementById('btnUpload').disabled = false;
+        }
 
         window.uploadPost = async () => {
             const file = fileInput.files[0];
@@ -205,8 +253,45 @@
                     url: reader.result, precio: price,
                     fecha: new Date(), likes: [], compradores: []
                 });
-                closeModal(); btn.innerText = "PUBLICAR AHORA"; btn.disabled = false;
+                closeModal('uploadModal');
             };
+        };
+
+        // ACTUALIZACIÓN DE FOTOS DE PERFIL (CORREGIDO)
+        window.updatePhoto = async (field, input) => {
+            const file = input.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const updateObj = {}; updateObj[field] = reader.result;
+                await updateDoc(doc(db, "usuarios", myData.id), updateObj);
+                myData[field] = reader.result;
+                updateAllUI();
+                input.value = ""; // PARA PODER SUBIR LA MISMA FOTO OTRA VEZ
+            };
+        };
+
+        // GUARDAR BIOGRAFÍA
+        window.saveBio = async () => {
+            const newBio = document.getElementById('bioInput').value;
+            await updateDoc(doc(db, "usuarios", myData.id), { biografia: newBio });
+            myData.biografia = newBio;
+            updateAllUI();
+            closeModal('bioModal');
+        };
+
+        // RECARGAR SALDO
+        window.saveMoney = async () => {
+            const amount = parseFloat(document.getElementById('walletInput').value);
+            if(amount > 0) {
+                const newBalance = (myData.saldo || 0) + amount;
+                await updateDoc(doc(db, "usuarios", myData.id), { saldo: newBalance });
+                myData.saldo = newBalance;
+                updateAllUI();
+                closeModal('walletModal');
+                document.getElementById('walletInput').value = "";
+            }
         };
 
         function loadFeed() {
@@ -221,6 +306,8 @@
                     const isLocked = post.precio > 0 && !isOwner && !hasBought;
                     const hasLiked = post.likes?.includes(myData.id);
 
+                    const imgElement = isLocked ? '' : `<img src="${post.url}" class="fade-in-img" onload="this.classList.add('loaded')">`;
+
                     container.innerHTML += `
                         <div class="post-card">
                             <div style="padding:15px; font-weight:800; display:flex; align-items:center; gap:10px;">
@@ -233,7 +320,7 @@
                                         <i class="fas fa-lock" style="font-size:2.5rem; color:var(--primary); margin-bottom:15px;"></i>
                                         <button onclick="buyPost('${d.id}', ${post.precio})" style="background:var(--primary); border:none; color:white; padding:15px 30px; border-radius:15px; font-weight:800; cursor:pointer; box-shadow: 0 10px 20px rgba(250,0,80,0.3);">DESBLOQUEAR POR $${post.precio}</button>
                                     </div>
-                                ` : `<img src="${post.url}">`}
+                                ` : imgElement}
                             </div>
                             <div class="post-actions">
                                 <div class="like-btn ${hasLiked ? 'active' : ''}" style="${isLocked ? 'opacity:0.2; pointer-events:none;' : ''}" 
@@ -260,23 +347,6 @@
         window.toggleLike = async (postId, hasLiked) => {
             const postRef = doc(db, "posts", postId);
             await updateDoc(postRef, { likes: hasLiked ? arrayRemove(myData.id) : arrayUnion(myData.id) });
-        };
-
-        window.addMoney = async () => {
-            const val = parseFloat(prompt("Cantidad a recargar:", "50"));
-            if(val > 0) {
-                const n = (myData.saldo || 0) + val;
-                await updateDoc(doc(db, "usuarios", myData.id), { saldo: n });
-                myData.saldo = n; updateAllUI();
-            }
-        };
-
-        window.editBio = async () => {
-            const b = prompt("Tu biografía:", myData.biografia || "");
-            if(b !== null) {
-                await updateDoc(doc(db, "usuarios", myData.id), { biografia: b });
-                myData.biografia = b; updateAllUI();
-            }
         };
     </script>
 </body>
