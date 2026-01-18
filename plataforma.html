@@ -3,25 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>V-Exclusive | Venezuela</title>
+    <title>V-Exclusive | Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #fa0050; --bg: #000000; --card: #121212; --text: #ffffff; --gray: #888; --border: #222; --venezuela: #ffcc00; }
+        :root { --primary: #fa0050; --bg: #000000; --card: #121212; --text: #ffffff; --gray: #888; --border: #222; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; }
 
-        /* --- TRANSICIONES DESLIZANTES --- */
+        /* --- TRANSICIONES --- */
         .view-container { position: relative; flex: 1; height: 100%; overflow: hidden; }
         .view-section { 
-            position: absolute; inset: 0; visibility: hidden; opacity: 0;
-            transform: translateX(50px);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow-y: auto; background: var(--bg); padding-bottom: 120px;
+            position: absolute; inset: 0; visibility: hidden; opacity: 0; transform: translateX(30px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; background: var(--bg); padding-bottom: 120px;
         }
         .view-section.active-view { visibility: visible; opacity: 1; transform: translateX(0); z-index: 10; }
 
-        /* --- SIDEBAR PC --- */
+        /* --- SIDEBAR --- */
         aside { width: 320px; padding: 40px; border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 100; background: var(--bg); }
         .logo { font-size: 1.8rem; font-weight: 900; color: white; margin-bottom: 40px; letter-spacing: -1px; }
         .logo span { color: var(--primary); }
@@ -36,40 +34,49 @@
         
         .post-header { padding: 15px; display: flex; align-items: center; justify-content: space-between; }
         .user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1px solid #333; }
+        .avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1px solid #333; background:#222; }
         .badge-v { color: #3897f0; font-size: 14px; margin-left: 4px; }
 
         .post-img-box { position: relative; width: 100%; min-height: 380px; background: #080808; display: flex; align-items: center; overflow: hidden; }
         .post-img { width: 100%; object-fit: cover; }
-        .blur-tease { filter: blur(35px) brightness(0.6); transform: scale(1.1); }
-        .lock-msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; text-align: center; background: rgba(0,0,0,0.2); }
+        
+        /* NUEVO EFECTO BLUR EXTREMO */
+        .blur-privacy { filter: blur(60px) brightness(0.5); transform: scale(1.2); }
+        .lock-msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; text-align: center; background: rgba(0,0,0,0.3); }
 
         .post-actions { padding: 15px; display: flex; align-items: center; gap: 20px; }
         .heart-btn { font-size: 1.6rem; cursor: pointer; transition: 0.2s; }
         .heart-btn.liked { color: var(--primary); animation: beat 0.3s ease-out; }
         @keyframes beat { 0% {transform: scale(1);} 50% {transform: scale(1.3);} 100% {transform: scale(1);} }
 
-        /* --- PERFIL VENEZUELA STYLE --- */
-        .cover { width: 100%; height: 200px; background: #222; position: relative; }
-        .cover img { width: 100%; height: 100%; object-fit: cover; }
-        .profile-top { padding: 0 20px; margin-top: -50px; position: relative; z-index: 10; }
-        .p-avatar { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--bg); background: #111; object-fit: cover; }
+        /* --- PERFIL PRO --- */
+        .cover-container { width: 100%; height: 220px; background: #222; position: relative; }
+        .cover-img { width: 100%; height: 100%; object-fit: cover; }
         
-        .cam-edit { position: absolute; background: var(--primary); color: white; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; border: 3px solid var(--bg); }
-        .cam-avatar { bottom: 5px; right: 5px; }
-        .cam-cover { top: 15px; right: 15px; background: rgba(0,0,0,0.6); }
+        /* EFECTO DESVANECIDO EN PORTADA */
+        .cover-container::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
+            background: linear-gradient(to bottom, transparent, var(--bg)); pointer-events: none;
+        }
 
-        /* TARJETAS DE PAGO MÓVIL */
+        .profile-top { padding: 0 20px; margin-top: -60px; position: relative; z-index: 10; }
+        .p-avatar { width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--bg); background: #111; object-fit: cover; }
+        
+        .cam-edit { position: absolute; background: var(--primary); color: white; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; border: 3px solid var(--bg); z-index:20; }
+        .cam-avatar { bottom: 5px; right: 5px; }
+        .cam-cover { top: 20px; right: 20px; background: rgba(0,0,0,0.6); }
+
         .pm-card { background: linear-gradient(135deg, #1e1e1e, #111); border: 1px solid #333; padding: 15px; border-radius: 16px; margin-top: 15px; position: relative; }
         .pm-tag { font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-        .pm-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-        .pm-val { font-family: monospace; font-size: 1.1rem; color: #fff; }
-        .copy-btn { background: #333; border: none; color: #fff; padding: 5px 10px; border-radius: 8px; font-size: 10px; cursor: pointer; }
+        .pm-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .pm-val { font-family: monospace; font-size: 1rem; color: #fff; }
+        .copy-btn { background: #333; border: none; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 10px; cursor: pointer; font-weight: 700; }
 
         /* --- BOTONES --- */
         .btn-p { background: var(--primary); color: white; border: none; padding: 14px 20px; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; width: 100%; font-size: 1rem; }
         .btn-p:active { transform: scale(0.97); }
         .btn-s { background: #1a1a1a; color: white; border: 1px solid #333; padding: 12px; border-radius: 14px; font-weight: 600; cursor: pointer; width: 100%; }
+        .btn-icon { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; padding: 0; }
 
         /* --- MODALES --- */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
@@ -101,16 +108,15 @@
     <div class="view-container">
         
         <div id="view-feed" class="view-section active-view">
-            <div style="padding:20px; font-weight:900; font-size:1.6rem; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); position:sticky; top:0; z-index:50; display:flex; justify-content:space-between; align-items:center;">
-                Explorar 
-                <span style="font-size:0.7rem; color:var(--venezuela); border:1px solid var(--venezuela); padding:4px 8px; border-radius:8px;">VENEZUELA</span>
+            <div style="padding:20px; font-weight:900; font-size:1.6rem; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); position:sticky; top:0; z-index:50;">
+                Explorar
             </div>
             <div class="feed-container" id="feed-items"></div>
         </div>
 
         <div id="view-profile" class="view-section">
-            <div class="cover">
-                <img id="p-cover" src="">
+            <div class="cover-container">
+                <img id="p-cover" class="cover-img" src="">
                 <div id="p-cam-cover" class="cam-edit cam-cover" onclick="changePhoto('fotoPortada')"><i class="fas fa-camera"></i></div>
             </div>
             <div class="profile-top">
@@ -127,13 +133,15 @@
                         </h2>
                         <p id="p-bio" style="color:#aaa; margin-top:6px; font-size:0.95rem;"></p>
                     </div>
-                    <div id="p-action-btn" style="width:140px;"></div>
+                    <div style="display:flex; gap:10px;">
+                        <div id="p-action-btn" style="flex-grow:1;"></div>
+                        <button class="btn-s btn-icon" onclick="shareProfile()"><i class="fas fa-share-alt"></i></button>
+                    </div>
                 </div>
 
                 <div id="p-venezuela-pay" style="margin-top:20px;">
                     <h4 style="font-size:0.8rem; color:#666; text-transform:uppercase;">Datos de Pago Móvil:</h4>
-                    <div id="p-pm-data">
-                        </div>
+                    <div id="p-pm-data"></div>
                 </div>
 
                 <div style="display:flex; gap:25px; margin-top:20px; padding-bottom:15px; border-bottom:1px solid #111;">
@@ -162,10 +170,10 @@
     <div class="modal" id="modal-config-pay">
         <div class="modal-content">
             <h3 style="margin-bottom:10px;">Configurar Pago Móvil</h3>
-            <p style="font-size:0.8rem; color:#666; margin-bottom:15px;">Estos datos serán visibles en tu perfil para que tus fans te transfieran.</p>
+            <p style="font-size:0.8rem; color:#666; margin-bottom:15px;">Estos datos serán visibles en tu perfil.</p>
             
-            <label style="font-size:0.75rem; color:var(--primary);">BANCO (Ej: Banesco, Mercantil...)</label>
-            <input type="text" id="ven-banco" class="input-p" placeholder="Nombre del banco">
+            <label style="font-size:0.75rem; color:var(--primary);">BANCO</label>
+            <input type="text" id="ven-banco" class="input-p" placeholder="Ej: Banesco">
             
             <label style="font-size:0.75rem; color:var(--primary); margin-top:15px; display:block;">TELÉFONO</label>
             <input type="text" id="ven-tel" class="input-p" placeholder="04121234567">
@@ -231,14 +239,25 @@
 
         let myData = null;
         let activeCreatorID = null;
+        let viewingProfileID = null; // Para saber qué perfil estamos viendo
 
-        // --- AUTH ---
+        // --- AUTH Y RUTAS ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const snap = await getDoc(doc(db, "usuarios", user.uid));
                 if(snap.exists()) {
                     myData = { id: user.uid, ...snap.data() };
-                    navTo('feed');
+                    
+                    // CHECK URL PARA PERFIL COMPARTIDO (?u=USERID)
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const sharedUser = urlParams.get('u');
+                    if(sharedUser) {
+                        openP(sharedUser);
+                        // Limpiar URL sin recargar
+                        window.history.replaceState({}, document.title, "/");
+                    } else {
+                        navTo('feed');
+                    }
                 }
             } else { window.location.href = "index.html"; }
         });
@@ -268,16 +287,24 @@
             }
         };
 
-        // --- FEED ---
+        // --- FEED (CON SINCRONIZACIÓN REAL DE AVATAR) ---
         function loadFeed() {
             const container = document.getElementById('feed-items');
+            // Usamos onSnapshot para que sea en tiempo real
             onSnapshot(query(collection(db, "posts"), orderBy("fecha", "desc")), (snap) => {
                 container.innerHTML = "";
-                snap.forEach(d => renderPost(d.id, d.data(), container));
+                snap.forEach(async (d) => { // Async aquí es clave
+                    const postData = d.data();
+                    // FETCH DEL CREADOR EN TIEMPO REAL PARA AVATAR ACTUALIZADO
+                    const creatorSnap = await getDoc(doc(db, "usuarios", postData.creadorId));
+                    const creatorData = creatorSnap.data();
+                    
+                    renderPost(d.id, postData, creatorData, container);
+                });
             });
         }
 
-        function renderPost(pid, post, container) {
+        function renderPost(pid, post, creator, container) {
             const isSub = (post.creadorId === myData.id) || (myData.suscripciones?.some(s => s.creatorId === post.creadorId && s.expiresAt > Date.now()));
             const isLiked = post.likes?.includes(myData.id);
             const isPending = myData.pendientes?.includes(post.creadorId);
@@ -287,19 +314,19 @@
             el.innerHTML = `
                 <div class="post-header">
                     <div class="user-info" onclick="openP('${post.creadorId}')">
-                        <img src="${post.creadorFoto || 'https://via.placeholder.com/50'}" class="avatar">
-                        <div style="font-weight:800;">@${post.creador} ${post.verificado ? '<i class="fas fa-check-circle badge-v"></i>' : ''}</div>
+                        <img src="${creator.fotoPerfil || 'https://via.placeholder.com/50'}" class="avatar">
+                        <div style="font-weight:800;">@${creator.username} ${creator.verificado ? '<i class="fas fa-check-circle badge-v"></i>' : ''}</div>
                     </div>
                 </div>
                 <div class="post-img-box">
                     ${isSub ? `<img src="${post.url}" class="post-img">` : 
                         `<div class="lock-msg">
-                            <i class="fas fa-lock" style="font-size:2.5rem; margin-bottom:15px; color:#fff;"></i>
-                            <button class="btn-p" style="width:auto; padding:12px 25px;" onclick="openSubModal('${post.creadorId}', '${post.creador}')">
+                            <h3 style="font-weight:900; letter-spacing:-1px;">CONTENIDO EXCLUSIVO</h3>
+                            <button class="btn-p" style="width:auto; padding:12px 25px; margin-top:15px;" onclick="openSubModal('${post.creadorId}', '${creator.username}')">
                                 ${isPending ? 'EN REVISIÓN...' : 'VER CONTENIDO'}
                             </button>
                         </div>
-                        <img src="${post.url}" class="post-img blur-tease">`
+                        <img src="${post.url}" class="post-img blur-privacy">`
                     }
                 </div>
                 <div class="post-actions">
@@ -310,10 +337,11 @@
             container.appendChild(el);
         }
 
-        // --- PERFIL ---
+        // --- PERFIL (COMPARTIR Y VISUALIZACIÓN) ---
         window.openP = (uid) => { renderProfile(uid); navTo('other'); }
 
         async function renderProfile(uid) {
+            viewingProfileID = uid; // Guardamos a quién vemos
             const snap = await getDoc(doc(db, "usuarios", uid));
             const user = snap.data();
             const isMe = uid === myData.id;
@@ -326,7 +354,6 @@
             document.getElementById('p-cam-avatar').style.display = isMe ? 'flex' : 'none';
             document.getElementById('p-cam-cover').style.display = isMe ? 'flex' : 'none';
 
-            // Datos Pago Movil Visibles
             const pmDiv = document.getElementById('p-pm-data');
             pmDiv.innerHTML = "";
             if(user.ven_tel) {
@@ -343,22 +370,32 @@
 
             const actions = document.getElementById('p-action-btn');
             if(isMe) {
-                actions.innerHTML = `<button class="btn-s" onclick="openConfigVen()">Configurar Pagos</button>`;
+                actions.innerHTML = `<button class="btn-s" onclick="openConfigVen()" style="width:100%;">Configurar Pagos</button>`;
             } else {
                 const isSub = myData.suscripciones?.some(s => s.creatorId === uid && s.expiresAt > Date.now());
-                actions.innerHTML = isSub ? `<button class="btn-s" style="color:var(--primary); border-color:var(--primary);">SUSCRITO ✓</button>` : 
-                                            `<button class="btn-p" onclick="openSubModal('${uid}', '${user.username}')">SUSCRIBIRSE</button>`;
+                actions.innerHTML = isSub ? `<button class="btn-s" style="color:var(--primary); border-color:var(--primary); width:100%;">SUSCRITO ✓</button>` : 
+                                            `<button class="btn-p" onclick="openSubModal('${uid}', '${user.username}')" style="width:100%;">SUSCRIBIRSE</button>`;
             }
 
             const grid = document.getElementById('p-grid');
             onSnapshot(query(collection(db, "posts"), where("creadorId", "==", uid), orderBy("fecha", "desc")), (s) => {
                 grid.innerHTML = "";
                 document.getElementById('p-posts').innerText = s.size;
-                s.forEach(d => renderPost(d.id, d.data(), grid));
+                // En el perfil, usamos los datos del usuario que ya tenemos
+                s.forEach(d => renderPost(d.id, d.data(), user, grid));
             });
         }
 
-        // --- PAGO MÓVIL (VENEZUELA) ---
+        // NUEVA FUNCIÓN PARA COMPARTIR PERFIL
+        window.shareProfile = () => {
+            // Usa el ID del perfil que estamos viendo actualmente
+            const url = `${window.location.origin}${window.location.pathname}?u=${viewingProfileID}`;
+            navigator.clipboard.writeText(url).then(() => {
+                alert("¡Enlace del perfil copiado al portapapeles!");
+            });
+        };
+
+        // --- PAGO MÓVIL Y SUSCRIPCIÓN ---
         window.openConfigVen = () => {
             document.getElementById('ven-banco').value = myData.ven_banco || "";
             document.getElementById('ven-tel').value = myData.ven_tel || "";
@@ -374,7 +411,7 @@
                 ven_ci: document.getElementById('ven-ci').value,
                 subPrice: document.getElementById('ven-price').value
             });
-            alert("Datos de Venezuela guardados!");
+            alert("Datos guardados!");
             location.reload();
         }
 
@@ -383,13 +420,13 @@
             const snap = await getDoc(doc(db, "usuarios", uid));
             const creator = snap.data();
             
-            document.getElementById('pay-to-user').innerText = "Suscribirse a @" + name + " ($" + (creator.subPrice || 5) + ")";
+            document.getElementById('pay-to-user').innerText = `Suscribirse a @${name} ($${creator.subPrice || 5})`;
             const container = document.getElementById('display-pm-cards');
             
             if(creator.ven_tel) {
                 container.innerHTML = `
                     <div class="pm-card">
-                        <div class="pm-tag">Transferir vía Pago Móvil</div>
+                        <div class="pm-tag">Datos para Pago Móvil</div>
                         <div class="pm-row"><span>BANCO</span> <b class="pm-val">${creator.ven_banco}</b></div>
                         <div class="pm-row"><span>TELÉFONO</span> <div><b class="pm-val">${creator.ven_tel}</b> <button class="copy-btn" onclick="navigator.clipboard.writeText('${creator.ven_tel}'); alert('Copiado')">COPIAR</button></div></div>
                         <div class="pm-row"><span>CÉDULA</span> <div><b class="pm-val">${creator.ven_ci}</b> <button class="copy-btn" onclick="navigator.clipboard.writeText('${creator.ven_ci}'); alert('Copiado')">COPIAR</button></div></div>
@@ -408,33 +445,28 @@
             reader.readAsDataURL(file);
             reader.onload = async () => {
                 await addDoc(collection(db, "solicitudes"), {
-                    creatorId: activeCreatorID,
-                    userId: myData.id,
-                    username: myData.username,
-                    proof: reader.result,
-                    status: 'pending',
-                    fecha: Date.now()
+                    creatorId: activeCreatorID, userId: myData.id, username: myData.username,
+                    proof: reader.result, status: 'pending', fecha: Date.now()
                 });
                 await updateDoc(doc(db, "usuarios", myData.id), { pendientes: arrayUnion(activeCreatorID) });
-                alert("Enviado. Tu acceso se activará cuando el creador verifique el pago móvil.");
+                alert("Enviado. Tu acceso se activará pronto.");
                 location.reload();
             }
         }
 
-        // --- VENTAS ---
+        // --- VENTAS Y OTROS ---
         function loadSales() {
             const container = document.getElementById('sales-list');
             onSnapshot(query(collection(db, "solicitudes"), where("creatorId", "==", myData.id), where("status", "==", "pending")), (snap) => {
-                container.innerHTML = snap.empty ? `<p style="text-align:center; padding:50px; color:#555;">No tienes pagos por confirmar.</p>` : "";
+                container.innerHTML = snap.empty ? `<p style="text-align:center; padding:50px; color:#555;">No tienes pagos pendientes.</p>` : "";
                 snap.forEach(d => {
                     const r = d.data();
                     const el = document.createElement('div');
-                    el.className = 'post';
-                    el.style.padding = "20px";
+                    el.className = 'post'; el.style.padding = "20px";
                     el.innerHTML = `
                         <p style="margin-bottom:10px;"><b>@${r.username}</b> envió capture:</p>
                         <img src="${r.proof}" style="width:100%; border-radius:15px; margin-bottom:15px;">
-                        <button class="btn-p" onclick="approveSale('${d.id}', '${r.userId}')">APROBAR Y DAR ACCESO</button>
+                        <button class="btn-p" onclick="approveSale('${d.id}', '${r.userId}')">APROBAR SUSCRIPCIÓN</button>
                     `;
                     container.appendChild(el);
                 });
@@ -451,7 +483,6 @@
             alert("Suscripción activada!");
         };
 
-        // --- OTROS ---
         window.toggleLike = async (pid, liked) => {
             await updateDoc(doc(db, "posts", pid), { likes: liked ? arrayRemove(myData.id) : arrayUnion(myData.id) });
         };
@@ -472,9 +503,9 @@
         window.publishPost = async () => {
             const img = document.getElementById('post-pre-img').src;
             if(!img) return;
+            // YA NO GUARDAMOS FOTO NI VERIFICADO EN EL POST, SE BUSCA EN TIEMPO REAL
             await addDoc(collection(db, "posts"), {
-                creadorId: myData.id, creador: myData.username, creadorFoto: myData.fotoPerfil || "",
-                verificado: myData.verificado || false, url: img, fecha: Date.now(), likes: []
+                creadorId: myData.id, url: img, fecha: Date.now(), likes: []
             });
             location.reload();
         };
