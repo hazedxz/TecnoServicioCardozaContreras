@@ -36,13 +36,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; transition: background 0.3s, color 0.3s; }
 
-        /* --- SPLASH SCREEN --- */
+        /* --- UI PRINCIPAL --- */
         #splash { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
         .splash-logo { font-size: 3rem; font-weight: 900; letter-spacing: -2px; animation: pulse 1.5s infinite; }
         .splash-logo span { color: var(--primary); }
         @keyframes pulse { 0% {opacity: 1;} 50% {opacity: 0.5;} 100% {opacity: 1;} }
 
-        /* --- TRANSICIONES --- */
         .view-container { position: relative; flex: 1; height: 100%; overflow: hidden; }
         .view-section { 
             position: absolute; inset: 0; visibility: hidden; opacity: 0; transform: translateY(20px);
@@ -67,67 +66,66 @@
         .user-info { display: flex; align-items: center; gap: 12px; cursor: pointer; }
         .avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); background: var(--hover); }
         .badge-v { color: var(--primary); font-size: 14px; margin-left: 4px; }
-
         .post-img-box { position: relative; width: 100%; min-height: 400px; background: #080808; display: flex; align-items: center; overflow: hidden; }
         .post-img { width: 100%; object-fit: cover; }
         .blur-privacy { filter: blur(40px) brightness(0.7); transform: scale(1.1); pointer-events: none; }
-        
         .lock-msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; text-align: center; background: rgba(0,0,0,0.4); backdrop-filter: grayscale(1); }
-
         .post-actions { padding: 15px; }
         .actions-row { display: flex; align-items: center; gap: 20px; color: var(--text); margin-bottom: 8px; }
         .heart-btn { font-size: 1.6rem; cursor: pointer; transition: 0.2s; }
         .heart-btn.liked { color: var(--primary); animation: beat 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes beat { 0% {transform: scale(1);} 50% {transform: scale(1.4);} 100% {transform: scale(1);} }
-
         .likes-text { font-size: 0.9rem; color: var(--text); }
         .likes-text b { font-weight: 700; }
-
         .delete-btn { color: var(--text-sec); cursor: pointer; font-size: 1.1rem; padding: 5px; transition: 0.3s; }
         .delete-btn:hover { color: var(--danger); }
+
+        /* --- NOTIFICACIONES (NUEVO) --- */
+        .notif-item { display: flex; align-items: center; gap: 15px; padding: 15px; border-bottom: 1px solid var(--border); background: var(--card); transition: 0.2s; }
+        .notif-item:hover { background: var(--hover); }
+        .notif-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--hover); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .notif-content { flex: 1; }
+        .notif-text { font-size: 0.95rem; line-height: 1.4; }
+        .notif-time { font-size: 0.75rem; color: var(--text-sec); margin-top: 4px; }
+        .n-like { color: #ef4444; } /* Rojo corazón */
+        .n-sub { color: #22c55e; } /* Verde dinero */
+        .n-sys { color: var(--primary); }
 
         /* --- PERFIL --- */
         .cover-container { width: 100%; height: 200px; background: var(--hover); position: relative; }
         .cover-img { width: 100%; height: 100%; object-fit: cover; }
         .cover-container::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; background: linear-gradient(to bottom, transparent, var(--bg)); pointer-events: none; }
-
         .profile-top { padding: 0 20px; margin-top: -60px; position: relative; z-index: 10; }
         .p-avatar { width: 110px; height: 110px; border-radius: 50%; border: 5px solid var(--bg); background: var(--card); object-fit: cover; box-shadow: var(--shadow); }
         .cam-edit { position: absolute; background: var(--primary); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; border: 3px solid var(--bg); z-index:20; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .cam-avatar { bottom: 5px; right: 5px; }
         .cam-cover { top: 20px; right: 20px; background: rgba(0,0,0,0.5); border: none; }
-
         .pm-card { background: var(--card); border: 1px solid var(--border); padding: 18px; border-radius: 18px; margin-top: 15px; position: relative; box-shadow: var(--shadow); }
         .pm-tag { font-size: 0.7rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; background: rgba(37, 99, 235, 0.1); width: max-content; padding: 4px 8px; border-radius: 6px; }
         .pm-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--border); }
         .pm-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .pm-val { font-family: monospace; font-size: 1.05rem; color: var(--text); font-weight: 600; }
         .copy-btn { background: var(--hover); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; font-weight: 700; transition:0.2s; }
-
-        /* --- BOTONES --- */
+        
         .btn-p { background: var(--primary); color: white; border: none; padding: 14px 20px; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; width: 100%; font-size: 1rem; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); }
         .btn-p:active { transform: scale(0.98); }
         .btn-s { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 14px; font-weight: 600; cursor: pointer; width: 100%; transition:0.2s; }
         .btn-s:hover { background: var(--hover); }
 
-        /* --- UPLOAD --- */
         .file-upload-box { width: 100%; height: 250px; background: var(--hover); border: 2px dashed var(--border); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; overflow: hidden; position: relative; }
         .file-upload-box:hover { border-color: var(--primary); background: rgba(37, 99, 235, 0.05); }
         .file-preview { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
 
-        /* --- MODALES --- */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
         .modal-content { background: var(--card); width: 92%; max-width: 450px; border-radius: 30px; border: 1px solid var(--border); padding: 30px; animation: popUp 0.3s ease; box-shadow: var(--shadow); color: var(--text); }
         @keyframes popUp { from {transform: scale(0.9); opacity:0;} to {transform: scale(1); opacity:1;} }
         .input-p { width: 100%; padding: 16px; background: var(--hover); border: 1px solid var(--border); color: var(--text); border-radius: 14px; margin-top: 10px; outline: none; font-size: 1rem; transition: 0.3s; }
         .input-p:focus { border-color: var(--primary); background: var(--card); }
 
-        /* LOADING */
         #loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .spinner { width: 50px; height: 50px; border: 5px solid var(--border); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
 
-        /* --- NAV MOVIL --- */
         .mobile-nav { display: none; position: fixed; bottom: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border); padding: 15px 0; justify-content: space-around; z-index: 500; backdrop-filter: blur(20px); }
         .mobile-nav i { font-size: 1.5rem; color: var(--text-sec); transition: 0.3s; }
         .mobile-nav i.active { color: var(--primary); transform: translateY(-3px); }
@@ -149,6 +147,7 @@
     <aside>
         <div class="logo">VELUM<span>.</span></div>
         <div class="menu-item active" id="m-feed" onclick="navTo('feed')"><i class="fas fa-home"></i> Inicio</div>
+        <div class="menu-item" id="m-notifs" onclick="navTo('notifs')"><i class="fas fa-bell"></i> Actividad</div>
         <div class="menu-item" id="m-requests" onclick="navTo('requests')"><i class="fas fa-wallet"></i> Ventas</div>
         <div class="menu-item" id="m-profile" onclick="navTo('myProfile')"><i class="fas fa-user-circle"></i> Mi Perfil</div>
         <div style="margin-top:auto;">
@@ -162,6 +161,12 @@
         <div id="view-feed" class="view-section active-view">
             <div style="padding:20px; font-weight:900; font-size:1.5rem; background:var(--nav-bg); backdrop-filter:blur(10px); position:sticky; top:0; z-index:50; border-bottom:1px solid var(--border);">Explorar</div>
             <div class="feed-container" id="feed-items"></div>
+        </div>
+
+        <div id="view-notifs" class="view-section">
+            <div style="padding:20px; font-weight:800; font-size:1.5rem; border-bottom:1px solid var(--border);">Actividad</div>
+            <div class="feed-container" id="notif-list">
+                </div>
         </div>
 
         <div id="view-profile" class="view-section">
@@ -213,6 +218,7 @@
 
     <nav class="mobile-nav">
         <i class="fas fa-home active" id="mn-feed" onclick="navTo('feed')"></i>
+        <i class="fas fa-bell" id="mn-notifs" onclick="navTo('notifs')"></i>
         <i class="fas fa-wallet" id="mn-requests" onclick="navTo('requests')"></i>
         <i class="fas fa-user-circle" id="mn-profile" onclick="navTo('myProfile')"></i>
         <i class="fas fa-adjust" onclick="toggleTheme()"></i>
@@ -265,7 +271,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, onSnapshot, query, orderBy, where, arrayUnion, arrayRemove, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, onSnapshot, query, orderBy, where, arrayUnion, arrayRemove, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyA-y05rnK5lD_v3G7YPS2wE1LlmAjrTz9c",
@@ -297,9 +303,7 @@
                 const snap = await getDoc(doc(db, "usuarios", user.uid));
                 if(snap.exists()) {
                     myData = { id: user.uid, ...snap.data() };
-                    cleanOldData(); // Limpieza automatica 24h
                     setTimeout(() => { document.getElementById('splash').style.opacity = '0'; setTimeout(() => document.getElementById('splash').style.display = 'none', 500); }, 800);
-                    
                     const urlParams = new URLSearchParams(window.location.search);
                     if(urlParams.get('u')) { openP(urlParams.get('u')); window.history.replaceState({}, document.title, "/plataforma.html"); }
                     else { navTo('feed'); }
@@ -311,13 +315,79 @@
         window.navTo = (view) => {
             document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active-view'));
             document.querySelectorAll('.menu-item, .mobile-nav i').forEach(el => el.classList.remove('active'));
-            if(view === 'feed') { document.getElementById('view-feed').classList.add('active-view'); document.getElementById('m-feed').classList.add('active'); document.getElementById('mn-feed').classList.add('active'); loadFeed(); }
-            else if(view === 'myProfile') { renderProfile(myData.id); document.getElementById('view-profile').classList.add('active-view'); document.getElementById('m-profile').classList.add('active'); document.getElementById('mn-profile').classList.add('active'); }
-            else if(view === 'requests') { loadSales(); document.getElementById('view-requests').classList.add('active-view'); document.getElementById('m-requests').classList.add('active'); document.getElementById('mn-requests').classList.add('active'); }
-            else { document.getElementById('view-profile').classList.add('active-view'); }
+            
+            if(view === 'feed') {
+                 document.getElementById('view-feed').classList.add('active-view');
+                 document.getElementById('m-feed').classList.add('active');
+                 document.getElementById('mn-feed').classList.add('active');
+                 loadFeed();
+            } else if(view === 'myProfile') {
+                 renderProfile(myData.id);
+                 document.getElementById('view-profile').classList.add('active-view');
+                 document.getElementById('m-profile').classList.add('active');
+                 document.getElementById('mn-profile').classList.add('active');
+            } else if(view === 'requests') {
+                 loadSales();
+                 document.getElementById('view-requests').classList.add('active-view');
+                 document.getElementById('m-requests').classList.add('active');
+                 document.getElementById('mn-requests').classList.add('active');
+            } else if(view === 'notifs') {
+                 loadNotifications();
+                 document.getElementById('view-notifs').classList.add('active-view');
+                 document.getElementById('m-notifs').classList.add('active');
+                 document.getElementById('mn-notifs').classList.add('active');
+            } else {
+                 document.getElementById('view-profile').classList.add('active-view');
+            }
         };
 
-        // --- FEED ---
+        // --- NOTIFICACIONES Y LIMPIEZA AUTOMÁTICA ---
+        function loadNotifications() {
+            const container = document.getElementById('notif-list');
+            container.innerHTML = '<div class="spinner" style="margin:20px auto;"></div>';
+
+            const notifRef = collection(db, `usuarios/${myData.id}/notificaciones`);
+            const q = query(notifRef, orderBy("fecha", "desc"));
+
+            onSnapshot(q, (snap) => {
+                container.innerHTML = snap.empty ? `<p style="text-align:center; padding:50px; color:var(--text-sec);">No tienes actividad reciente.</p>` : "";
+                
+                const now = Date.now();
+                const oneDay = 24 * 60 * 60 * 1000;
+
+                snap.forEach(d => {
+                    const n = d.data();
+                    
+                    // AUTO DELETE SI ES VIEJA (>24h)
+                    if (now - n.fecha > oneDay) {
+                        deleteDoc(d.ref); // Borra físicamente de firebase
+                        return; // No la muestra
+                    }
+
+                    // CALCULAR TIEMPO (Hace X horas)
+                    const diff = Math.floor((now - n.fecha) / 3600000); // Horas
+                    const timeStr = diff < 1 ? "Hace un momento" : `Hace ${diff}h`;
+
+                    // ICONO SEGUN TIPO
+                    let icon = '<i class="fas fa-info-circle n-sys"></i>';
+                    if(n.tipo === 'like') icon = '<i class="fas fa-heart n-like"></i>';
+                    if(n.tipo === 'sub') icon = '<i class="fas fa-dollar-sign n-sub"></i>';
+
+                    const div = document.createElement('div');
+                    div.className = 'notif-item';
+                    div.innerHTML = `
+                        <div class="notif-icon">${icon}</div>
+                        <div class="notif-content">
+                            <div class="notif-text"><b>@${n.fromUser}</b> ${n.texto}</div>
+                            <div class="notif-time">${timeStr}</div>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            });
+        }
+
+        // --- FEED & LIKES ---
         function loadFeed() {
             const container = document.getElementById('feed-items');
             onSnapshot(query(collection(db, "posts"), orderBy("fecha", "desc")), (snap) => {
@@ -335,7 +405,6 @@
             const isLiked = post.likes?.some(l => l.uid === myData.id);
             const isPending = myData.pendientes?.includes(post.creadorId);
 
-            // Generar texto de likes: "Le gusta a @Juan y 4 más"
             let likesText = "Sé el primero en dar like";
             if(post.likes && post.likes.length > 0) {
                 const lastLiker = post.likes[post.likes.length - 1];
@@ -366,7 +435,7 @@
                 </div>
                 <div class="post-actions">
                     <div class="actions-row">
-                        <i class="${isLiked ? 'fas' : 'far'} fa-heart heart-btn ${isLiked?'liked':''}" onclick="toggleLike('${pid}', ${isLiked})"></i>
+                        <i class="${isLiked ? 'fas' : 'far'} fa-heart heart-btn ${isLiked?'liked':''}" onclick="toggleLike('${pid}', '${post.creadorId}', ${isLiked})"></i>
                     </div>
                     <div class="likes-text">${likesText}</div>
                 </div>
@@ -374,32 +443,33 @@
             container.appendChild(div);
         }
 
-        // --- LOGICA DE LIKES OPTIMIZADA (ARRAY DE OBJETOS) ---
-        window.toggleLike = async (pid, isLiked) => {
+        // LIKES CON NOTIFICACIÓN
+        window.toggleLike = async (pid, ownerId, isLiked) => {
             const postRef = doc(db, "posts", pid);
             const pSnap = await getDoc(postRef);
             if(!pSnap.exists()) return;
 
             let currentLikes = pSnap.data().likes || [];
             if (isLiked) {
-                // Borrar mi like (filtrar por UID)
                 currentLikes = currentLikes.filter(l => l.uid !== myData.id);
             } else {
-                // Agregar mi like
                 currentLikes.push({ uid: myData.id, username: myData.username });
+                // ENVIAR NOTIFICACIÓN SI NO ES MI PROPIO POST
+                if(ownerId !== myData.id) {
+                    addDoc(collection(db, `usuarios/${ownerId}/notificaciones`), {
+                        tipo: 'like', fromUser: myData.username, texto: 'le dio like a tu publicación', fecha: Date.now()
+                    });
+                }
             }
             await updateDoc(postRef, { likes: currentLikes });
         };
 
         window.deletePost = async (pid) => {
-            if(confirm("¿Eliminar publicación permanentemente?")) {
-                await deleteDoc(doc(db, "posts", pid));
-            }
+            if(confirm("¿Eliminar publicación permanentemente?")) await deleteDoc(doc(db, "posts", pid));
         };
 
         // --- PERFIL ---
         window.openP = (uid) => { renderProfile(uid); navTo('other'); }
-
         async function renderProfile(uid) {
             viewingProfileID = uid;
             const snap = await getDoc(doc(db, "usuarios", uid));
@@ -414,22 +484,14 @@
             document.getElementById('p-check').style.display = user.verificado ? 'inline-block' : 'none';
             document.getElementById('p-cam-avatar').style.display = isMe ? 'flex' : 'none';
             document.getElementById('p-cam-cover').style.display = isMe ? 'flex' : 'none';
-
             const pmDiv = document.getElementById('p-pm-data');
-            pmDiv.innerHTML = user.ven_tel ? `
-                <div class="pm-card"><div class="pm-row"><span>Banco:</span> <b class="pm-val">${user.ven_banco}</b></div>
-                <div class="pm-row"><span>Teléfono:</span> <b class="pm-val">${user.ven_tel}</b></div>
-                <div class="pm-row"><span>Cédula:</span> <b class="pm-val">${user.ven_ci}</b></div></div>` : 
-                (isMe ? `<p style="color:var(--text-sec); font-size:0.8rem;">Sin pagos configurados.</p>` : "");
-
+            pmDiv.innerHTML = user.ven_tel ? `<div class="pm-card"><div class="pm-row"><span>Banco:</span> <b class="pm-val">${user.ven_banco}</b></div><div class="pm-row"><span>Teléfono:</span> <b class="pm-val">${user.ven_tel}</b></div><div class="pm-row"><span>Cédula:</span> <b class="pm-val">${user.ven_ci}</b></div></div>` : (isMe ? `<p style="color:var(--text-sec); font-size:0.8rem;">Sin pagos configurados.</p>` : "");
             const actions = document.getElementById('p-action-btn');
             if(isMe) actions.innerHTML = `<button class="btn-s" onclick="openConfigVen()" style="width:100%;">Editar Pagos</button>`;
             else {
                 const isSub = myData.suscripciones?.some(s => s.creatorId === uid && s.expiresAt > Date.now());
-                actions.innerHTML = isSub ? `<button class="btn-s" style="color:var(--primary); border-color:var(--primary); width:100%;">SUSCRITO ✓</button>` : 
-                                            `<button class="btn-p" onclick="openSubModal('${uid}', '${user.username}')" style="width:100%;">SUSCRIBIRSE</button>`;
+                actions.innerHTML = isSub ? `<button class="btn-s" style="color:var(--primary); border-color:var(--primary); width:100%;">SUSCRITO ✓</button>` : `<button class="btn-p" onclick="openSubModal('${uid}', '${user.username}')" style="width:100%;">SUSCRIBIRSE</button>`;
             }
-
             const grid = document.getElementById('p-grid');
             onSnapshot(query(collection(db, "posts"), where("creadorId", "==", uid), orderBy("fecha", "desc")), (s) => {
                 grid.innerHTML = "";
@@ -437,93 +499,12 @@
                 s.forEach(d => renderPost(d.id, d.data(), user, grid));
             });
         }
-
         window.shareProfile = () => {
             const url = `${window.location.origin}${window.location.pathname}?u=${viewingProfileID}`;
             navigator.clipboard.writeText(url).then(() => alert("Enlace copiado"));
         };
 
-        // --- COMPRESIÓN ---
-        function compressImage(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        let width = img.width, height = img.height, maxDim = 1000;
-                        if (width > height && width > maxDim) { height *= maxDim / width; width = maxDim; }
-                        else if (height > maxDim) { width *= maxDim / height; height = maxDim; }
-                        canvas.width = width; canvas.height = height;
-                        ctx.drawImage(img, 0, 0, width, height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.6));
-                    };
-                };
-            });
-        }
-
-        // --- UPLOAD & CONFIG ---
-        window.openPostModal = () => {
-            document.getElementById('post-pre-img').style.display='none'; document.getElementById('post-text').style.display='block';
-            document.getElementById('fileIn').value = ""; document.getElementById('btn-pub-post').disabled = true;
-            document.getElementById('modal-post').style.display='flex';
-        }
-        window.previewPost = (input) => {
-            if(input.files[0]){
-                const reader = new FileReader();
-                reader.onload = e => { document.getElementById('post-pre-img').src = e.target.result; document.getElementById('post-pre-img').style.display='block'; document.getElementById('post-text').style.display='none'; document.getElementById('btn-pub-post').disabled = false; };
-                reader.readAsDataURL(input.files[0]);
-            }
-        };
-        window.publishPost = async () => {
-            document.getElementById('loading-overlay').style.display = 'flex';
-            document.getElementById('modal-post').style.display = 'none';
-            try {
-                const compressed = await compressImage(document.getElementById('fileIn').files[0]);
-                await addDoc(collection(db, "posts"), { creadorId: myData.id, url: compressed, fecha: Date.now(), likes: [] });
-                location.reload();
-            } catch (e) { alert("Error"); document.getElementById('loading-overlay').style.display = 'none'; }
-        };
-
-        window.openConfigVen = () => {
-            document.getElementById('ven-banco').value = myData.ven_banco || "";
-            document.getElementById('ven-tel').value = myData.ven_tel || "";
-            document.getElementById('ven-ci').value = myData.ven_ci || "";
-            document.getElementById('ven-price').value = myData.subPrice || 5;
-            document.getElementById('modal-config-pay').style.display='flex';
-        }
-        window.saveVenPay = async () => {
-            await updateDoc(doc(db, "usuarios", myData.id), { ven_banco: document.getElementById('ven-banco').value, ven_tel: document.getElementById('ven-tel').value, ven_ci: document.getElementById('ven-ci').value, subPrice: document.getElementById('ven-price').value });
-            location.reload();
-        }
-
-        window.openSubModal = async (uid, name) => {
-            activeCreatorID = uid;
-            const snap = await getDoc(doc(db, "usuarios", uid));
-            const creator = snap.data();
-            document.getElementById('pay-to-user').innerText = `Suscribirse a @${name} ($${creator.subPrice||5})`;
-            document.getElementById('display-pm-cards').innerHTML = creator.ven_tel ? 
-                `<div class="pm-card"><div class="pm-tag">Pago Móvil</div>
-                <div class="pm-row"><span>BANCO</span> <b>${creator.ven_banco}</b></div>
-                <div class="pm-row"><span>TEL</span> <div><b>${creator.ven_tel}</b> <button class="copy-btn" onclick="navigator.clipboard.writeText('${creator.ven_tel}')">COPIAR</button></div></div>
-                <div class="pm-row"><span>C.I</span> <div><b>${creator.ven_ci}</b> <button class="copy-btn" onclick="navigator.clipboard.writeText('${creator.ven_ci}')">COPIAR</button></div></div></div>` : "<p>Sin datos.</p>";
-            document.getElementById('modal-subscribe').style.display='flex';
-        }
-
-        window.sendPaymentReq = async () => {
-            const file = document.getElementById('proofIn').files[0];
-            if(!file) return alert("Falta comprobante");
-            document.getElementById('loading-overlay').style.display = 'flex';
-            const compressed = await compressImage(file);
-            await addDoc(collection(db, "solicitudes"), { creatorId: activeCreatorID, userId: myData.id, username: myData.username, proof: compressed, status: 'pending', fecha: Date.now() });
-            await updateDoc(doc(db, "usuarios", myData.id), { pendientes: arrayUnion(activeCreatorID) });
-            alert("Enviado"); location.reload();
-        }
-
-        // --- VENTAS & LIMPIEZA ---
+        // --- VENTAS & NOTIFICACIONES DE COMPRA ---
         function loadSales() {
             const container = document.getElementById('sales-list');
             onSnapshot(query(collection(db, "solicitudes"), where("creatorId", "==", myData.id), where("status", "==", "pending")), (snap) => {
@@ -540,28 +521,39 @@
             const exp = Date.now() + (30*24*60*60*1000);
             await updateDoc(doc(db, "usuarios", uid), { suscripciones: arrayUnion({ creatorId: myData.id, expiresAt: exp }), pendientes: arrayRemove(myData.id) });
             await updateDoc(doc(db, "solicitudes", id), { status: 'approved' });
+            
+            // NOTIFICAR AL USUARIO QUE FUE APROBADO
+            addDoc(collection(db, `usuarios/${uid}/notificaciones`), {
+                tipo: 'sub', fromUser: myData.username, texto: 'aprobó tu suscripción. ¡Bienvenido!', fecha: Date.now()
+            });
             alert("Listo!");
         };
 
-        // LIMPIEZA AUTOMATICA 24H (Solicitudes viejas aprobadas/rechazadas)
-        async function cleanOldData() {
-            const yesterday = Date.now() - (24*60*60*1000);
-            const q = query(collection(db, "solicitudes"), where("fecha", "<", yesterday), where("status", "==", "approved"));
-            const snap = await getDoc(q); // Corrección: getDocs, pero por simplicidad en limpieza dejamos el esqueleto
-            // En producción aquí iría un deleteDoc en loop.
+        // --- COMPRESIÓN & UPLOAD ---
+        function compressImage(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader(); reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image(); img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+                        let width = img.width, height = img.height, maxDim = 1000;
+                        if (width > height && width > maxDim) { height *= maxDim / width; width = maxDim; }
+                        else if (height > maxDim) { width *= maxDim / height; height = maxDim; }
+                        canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.6));
+                    };
+                };
+            });
         }
-
-        window.changePhoto = (field) => {
-            const inp = document.createElement('input'); inp.type='file';
-            inp.onchange = async e => {
-                document.getElementById('loading-overlay').style.display='flex';
-                const compressed = await compressImage(e.target.files[0]);
-                await updateDoc(doc(db, "usuarios", myData.id), { [field]: compressed });
-                location.reload();
-            };
-            inp.click();
-        };
-
+        window.openPostModal = () => { document.getElementById('post-pre-img').style.display='none'; document.getElementById('post-text').style.display='block'; document.getElementById('fileIn').value = ""; document.getElementById('btn-pub-post').disabled = true; document.getElementById('modal-post').style.display='flex'; }
+        window.previewPost = (input) => { if(input.files[0]){ const reader = new FileReader(); reader.onload = e => { document.getElementById('post-pre-img').src = e.target.result; document.getElementById('post-pre-img').style.display='block'; document.getElementById('post-text').style.display='none'; document.getElementById('btn-pub-post').disabled = false; }; reader.readAsDataURL(input.files[0]); } };
+        window.publishPost = async () => { document.getElementById('loading-overlay').style.display = 'flex'; document.getElementById('modal-post').style.display = 'none'; try { const compressed = await compressImage(document.getElementById('fileIn').files[0]); await addDoc(collection(db, "posts"), { creadorId: myData.id, url: compressed, fecha: Date.now(), likes: [] }); location.reload(); } catch (e) { alert("Error"); document.getElementById('loading-overlay').style.display = 'none'; } };
+        window.openConfigVen = () => { document.getElementById('ven-banco').value = myData.ven_banco || ""; document.getElementById('ven-tel').value = myData.ven_tel || ""; document.getElementById('ven-ci').value = myData.ven_ci || ""; document.getElementById('ven-price').value = myData.subPrice || 5; document.getElementById('modal-config-pay').style.display='flex'; }
+        window.saveVenPay = async () => { await updateDoc(doc(db, "usuarios", myData.id), { ven_banco: document.getElementById('ven-banco').value, ven_tel: document.getElementById('ven-tel').value, ven_ci: document.getElementById('ven-ci').value, subPrice: document.getElementById('ven-price').value }); location.reload(); }
+        window.openSubModal = async (uid, name) => { activeCreatorID = uid; const snap = await getDoc(doc(db, "usuarios", uid)); const creator = snap.data(); document.getElementById('pay-to-user').innerText = `Suscribirse a @${name} ($${creator.subPrice||5})`; document.getElementById('display-pm-cards').innerHTML = creator.ven_tel ? `<div class="pm-card"><div class="pm-tag">Pago Móvil</div><div class="pm-row"><span>BANCO</span> <b>${creator.ven_banco}</b></div><div class="pm-row"><span>TEL</span> <div><b>${creator.ven_tel}</b> <button class="copy-btn" onclick="navigator.clipboard.writeText('${creator.ven_tel}')">COPIAR</button></div></div><div class="pm-row"><span>C.I</span> <div><b>${creator.ven_ci}</b> <button class="copy-btn" onclick="navigator.clipboard.writeText('${creator.ven_ci}')">COPIAR</button></div></div></div>` : "<p>Sin datos.</p>"; document.getElementById('modal-subscribe').style.display='flex'; }
+        window.sendPaymentReq = async () => { const file = document.getElementById('proofIn').files[0]; if(!file) return alert("Falta comprobante"); document.getElementById('loading-overlay').style.display = 'flex'; const compressed = await compressImage(file); await addDoc(collection(db, "solicitudes"), { creatorId: activeCreatorID, userId: myData.id, username: myData.username, proof: compressed, status: 'pending', fecha: Date.now() }); await updateDoc(doc(db, "usuarios", myData.id), { pendientes: arrayUnion(activeCreatorID) }); alert("Enviado"); location.reload(); }
+        window.changePhoto = (field) => { const inp = document.createElement('input'); inp.type='file'; inp.onchange = async e => { document.getElementById('loading-overlay').style.display='flex'; const compressed = await compressImage(e.target.files[0]); await updateDoc(doc(db, "usuarios", myData.id), { [field]: compressed }); location.reload(); }; inp.click(); };
         window.closeModal = (id) => document.getElementById(id).style.display='none';
         window.logout = () => signOut(auth).then(() => location.href="index.html");
     </script>
